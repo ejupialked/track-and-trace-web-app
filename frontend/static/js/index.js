@@ -1,13 +1,17 @@
+import Homepage from "./views/Homepage.js"
+import VenueCheckin from "./views/VenueCheckin.js"
+import AddUser from "./views/AddUser.js"
+
+
 const navigateTo  = url => {
     history.pushState(null, null, url);
     router();
 }
 const router = async () => {
     const routes = [
-        { path: '/', view : () => console.log("Homepage")},
-        { path: '/venueCheckin', view : () => console.log("Venue check in...")},
-        { path: '/userProfile', view : () => console.log("User Profile...")},
-        { path: '/addUser', view : () => console.log("Add User")}
+        { path: '/', view: Homepage}, //Class reference
+        { path: '/venueCheckin', view : VenueCheckin},
+        { path: '/addUser', view : AddUser},
     ]
 
     const matchRoute = routes.map(route => {
@@ -26,23 +30,26 @@ const router = async () => {
         } 
     }
 
-
-    console.log(match.route.view())
+    //create new instance of view
+    const view = new match.route.view(); 
+    
+    document.querySelector("#app").innerHTML = await view.getHtml()
 };
 
+//reloads page when going back
+window.addEventListener('popstate', (e) => {
+    router();
+});
 
-
-
+  
 document.addEventListener('DOMContentLoaded', () => {
-
-
-
     // Prevents from refreshing
-    document.body.addEventListener('click', e => {
-        if (e.target.matches("data-link")) {
-            e.preventDefault();
-            navigateTo(e.target.href)
+    document.body.addEventListener("click", e => {
+        if (e.target.matches("[data-link]")) {
+            e.preventDefault(); //stops from the following the link
+            navigateTo(e.target.href)//navigate to the page
         }
     })
    router(); 
 })
+
