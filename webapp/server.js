@@ -12,8 +12,4 @@ app.get("/*", (req, res) => {
 /**
  * Start Express server.
  */
-const server = app.listen(0, () => {
-  const port = server.address().port;
-  console.log(`App is running at http://localhost:${port}`);
-  console.log("\nPress CTRL+Z to stop");
-});
+app.listen(process.env.PORT || 5061, () => console.log("Server running..."));
