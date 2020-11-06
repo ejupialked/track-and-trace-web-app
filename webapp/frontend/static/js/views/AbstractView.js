@@ -1,4 +1,4 @@
-export default class {
+export default class  {
     constructor() { }
     setTitle(title) {
         document.title = title;
@@ -7,4 +7,6 @@ export default class {
     async getHtml(){
         return "";
     }
+
+    async init(){}
 }

@@ -35,3 +35,40 @@ body {
 a {
     color: #009579;
 }
+
+
+     /* Style inputs with type="text", select elements and textareas */
+input[type=text], input[type=number], input[type=email] {
+  width: 100%; 
+  padding: 12px; 
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  box-sizing: border-box; 
+  margin-top: 6px; 
+  margin-bottom: 16px; 
+  resize: vertical 
+}
+
+input[type=submit] {
+  background-color: #373837;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* When moving the mouse over the submit button, add a darker green color */
+input[type=submit]:hover {
+  background-color: #636863;
+}
+
+.radioGroup{
+    padding-bottom: 10px;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #adbeca;
+  padding: 20px;
+} 
