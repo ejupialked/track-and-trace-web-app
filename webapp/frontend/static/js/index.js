@@ -1,18 +1,30 @@
 import Homepage from "./views/Homepage.js";
 import VenueCheckin from "./views/VenueCheckin.js";
 import RegisterUser from "./views/RegisterUser.js";
+import RegisterVenue from "./views/RegisterVenue.js";
+import CheckinUser from "./views/CheckinUser.js";
+import UserLocations from "./views/UserLocations.js";
+import VenueVisitors from "./views/VenueVisitors.js";
+import InfectedUsers from "./views/InfectedUsers.js";
+import ReportPositiveTest from "./views/ReportPositiveTest.js";
 
 
 const navigateTo  = url => {
     history.pushState(null, null, url);
     router();
-}
+};
 
 const router = async () => {
     const routes = [
-      { path: "/", view: Homepage }, //Class reference
+      { path: "/", view: Homepage },
       { path: "/venueCheckin", view: VenueCheckin },
+      { path: "/registerVenue", view: RegisterVenue },
       { path: "/registerUser", view: RegisterUser },
+      { path: "/checkinUser", view: CheckinUser },
+      { path: "/userLocations", view: UserLocations },
+      { path: "/venueVisitors", view: VenueVisitors },
+      { path: "/infectedUsers", view: InfectedUsers },
+      { path: "/reportPositiveTest", view: ReportPositiveTest },
     ];
 
     const matchRoute = routes.map(route => {
