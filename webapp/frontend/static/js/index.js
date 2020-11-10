@@ -1,6 +1,6 @@
-import Homepage from "./views/Homepage.js"
-import VenueCheckin from "./views/VenueCheckin.js"
-import AddUser from "./views/AddUser.js"
+import Homepage from "./views/Homepage.js";
+import VenueCheckin from "./views/VenueCheckin.js";
+import RegisterUser from "./views/RegisterUser.js";
 
 
 const navigateTo  = url => {
@@ -10,9 +10,9 @@ const navigateTo  = url => {
 
 const router = async () => {
     const routes = [
-        { path: '/', view: Homepage}, //Class reference
-        { path: '/venueCheckin', view : VenueCheckin},
-        { path: '/addUser', view : AddUser},
+      { path: "/", view: Homepage }, //Class reference
+      { path: "/venueCheckin", view: VenueCheckin },
+      { path: "/registerUser", view: RegisterUser },
     ];
 
     const matchRoute = routes.map(route => {
@@ -51,7 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault(); //stops from the following the link
             navigateTo(e.target.href); //navigate to the page
         }
-    })
+    });
     router(); 
-})
+});
+
 

@@ -1,37 +1,37 @@
 module.exports = async function (context, req) {
-    context.log('Calling create user profile...container');
+    context.log('Calling create user profile...');
 
-    let responseMessage;
-    let status;
+    const name = req.query.name || req.body;
+    const age = req.query.age || req.body.age;
+    const address = req.query.address || req.body.address;
+    const gender = req.query.gender || req.body.gender;
+    const email = req.query.email || req.body.email;
+    
+    if ((req.query.name || (req.body && req.body.name)) &&
+        (req.query.age || (req.body && req.body.age)) &&
+        (req.query.address || (req.body && req.body.address)) &&
+        (req.query.gender || (req.body && req.body.gender)) &&
+        (req.query.email || (req.body && req.body.email)) 
+        ) {
+        
+        console.log("Creating user...");
 
-    const name = req.query.name;
-    const age = req.query.age;
-    const address = req.query.address;
-    const gender = req.query.gender;
-    const email = req.query.email;
+        //Create user
 
-    if (
-        typeof name != "string" ||
-        isNaN(age) ||
-        typeof gender != "string" ||
-        typeof address != "string" ||
-        typeof email != "string"
-    ) {
-        status = 400;
-        responseMessage =
-        "The function must be called with six arguments " +
+        context.res = {
+          status: 200,
+          body: "User created",
+        };
+      } else {
+        context.res = {
+          status: 400,
+          body: "The function must be called with six arguments " +
         '"name: String", ' +
         '"age: String", ' +
         '"gender: String", ' +
         '"address: String", ' +
-        '"email: String"';
-    } else {
-        responseMessage = "User added!";
-        status = 200;
-    }
-    
-    context.res = {
-        status: status,
-        body: responseMessage,
-    };
+        '"email: String',
+        };
+      }
+      context.done();    
 }

@@ -17,6 +17,7 @@ export default class extends AbstractView {
       let address = document.getElementById("address").value;
       let gender = document.getElementById("male").value;
 
+
       if (!gender.checked) {
         gender = "male";
       }else{
@@ -37,34 +38,24 @@ export default class extends AbstractView {
 
       console.log(bo);
 
-      fetch("https://covidtrackandtrace.azurewebsites.net/api/createUserProfile",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({
-            name: name,
-            age: age,
-            address: address,
-            gender: gender,
-            email: email,
-          }),
-        }
-      ).then((res) => processResponse(res));
+      fetch("http://localhost:7071/api/createUserProfile", {
+        method: "POST",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-type": "application/json",
+        },
+        body: bo,
+      })
+        .then((response) => processResponse(response));
     });
-  }
-
-
-  async processResponse(res) {
-    console.log(res);
   }
 
   async getHtml() {
     return `
-        <h1>Create profile</h1>
+  
+        <h1>Register User</h1>
         <p>Complete all the required fields to create a profile</p>
+      <div id="output"></div>
           <div class="container">
             <form id="profileForm">
               <input
@@ -92,7 +83,7 @@ export default class extends AbstractView {
               />
               <div class="radioGroup">
                 <label for="gender">Male</label>
-                <input type="radio" name="gender" id="male" value="male" />
+                <input type="radio" name="gender" id="male" value="male" checked />
                 <label for="gender">Female</label>
                 <input type="radio" name="gender" id="female" value="female" />
               </div>
@@ -103,9 +94,21 @@ export default class extends AbstractView {
                 required
                 placeholder="Email"
               />
-              <input type="submit" value="Create Profile" />
+              <input type="submit" value="Register" />
             </form>
           </div>
         `;
+  }
+}
+
+
+
+
+function processResponse(response) {
+  if (response.status != 200) {
+    response.text().then((text) => AbstractView.showError(text));
+  } else {
+    response.text().then((text) => AbstractView.showSuccess(text));
+
   }
 }
