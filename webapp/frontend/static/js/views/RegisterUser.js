@@ -38,15 +38,19 @@ export default class extends AbstractView {
 
       console.log(bo);
 
-      fetch("http://localhost:7071/api/createUserProfile", {
-        method: "POST",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-type": "application/json",
-        },
-        body: bo,
-      })
-        .then((response) => processResponse(response));
+      fetch("https://covidtrackandtrace.azurewebsites.net/api/createUserProfile",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-type": "application/json",
+          },
+          body: bo,
+        }
+      ).then((response) => processResponse(response));
+
+      profileForm.reset();
+
     });
   }
 
