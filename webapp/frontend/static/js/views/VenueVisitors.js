@@ -25,9 +25,9 @@ export default class extends AbstractView {
             <option value="academic">Academic venue</option>
           </select> <br>
           <label for="Date">Start date: </label>
-          <input type="date" id="startDate" name="date"><br>
+          <input type="date" id="startDate" name="date"  placeholder="yyyy-mm-dd" ><br>
           <label for="Date">End date</label>
-          <input type="date" id="endDate" name="date"><br>
+          <input type="date" id="endDate" name="date"  placeholder="yyyy-mm-dd"><br>
           <input type="submit" value="Search" />
         </form>
       </div>

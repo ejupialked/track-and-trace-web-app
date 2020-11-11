@@ -7,7 +7,32 @@ export default class extends AbstractView {
   }
 
   async init() {
-    
+    const venueForm = document.getElementById("venueForm");
+
+    venueForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      let name = document.getElementById("name").value;
+      let postcode = document.getElementById("postcode").value;
+
+      const body = JSON.stringify({
+        name: name,
+        postcode: postcode,
+      });
+
+      console.log(body);
+
+      fetch("https://covidtrackandtrace.azurewebsites.net/api/registerVenue", {
+        method: "POST",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-type": "application/json",
+        },
+        body: body,
+      }).then((response) => processResponse(response));
+
+      venueForm.reset();
+    });
   }
 
   async getHtml() {
@@ -31,13 +56,6 @@ export default class extends AbstractView {
             required
             placeholder="Postcode (e.g SO18 2NU)"
           />
-          <label for="venues">Venue type: </label>
-          <select name="venues" id="venus">
-            <option value="pub">Pub</option>
-            <option value="business">Business centre</option>
-            <option value="sport">Sport Club</option>
-            <option value="academic">Academic venue</option>
-          </select> <br>
           <input type="submit" value="Register" />
         </form>
       </div>

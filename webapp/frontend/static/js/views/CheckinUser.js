@@ -32,7 +32,7 @@ export default class extends AbstractView {
             <option value="4">John</option>
           </select> <br>
            <label for="Date">Date user has visited the venue: </label>
-          <input type="date" id="birthday" name="date"><br><br>
+          <input type="date" id="date" name="date"  placeholder="yyyy-mm-dd"><br><br>
           <input type="submit" value="Register"/>
         </form>
       </div>
