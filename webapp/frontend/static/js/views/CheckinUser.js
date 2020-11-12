@@ -7,12 +7,6 @@ export default class extends AbstractView {
   }
 
   async init() {
-    
- 
-
-
-
-
     fetch("http://localhost:7071/api/fetchUsers")
       .then((response) => {
         console.log("Response: " + response);
