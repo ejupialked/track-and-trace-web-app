@@ -36,6 +36,14 @@
       "name": "checkinsTable",
       "tableName": "checkinsTable",
       "connection": "covidtrackandtrace_STORAGE"
+    },
+    {
+      "type": "table",
+      "direction": "in",
+      "name": "venueEntity",
+      "tableName": "venuesTable",
+      "connection": "covidtrackandtrace_STORAGE",
+      "partitionKey": "{venue}"
     }
   ]
 }

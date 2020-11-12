@@ -26,11 +26,12 @@ module.exports = async function (context, req) {
 
     console.log("userId: " + json.PartitionKey);
 
+    
 
     reportsTable.push({
-      PartitionKey: 'Positive Test',
+      PartitionKey: "Positive Test",
       RowKey: uuidv4(),
-      Date: date,
+      Date: new Date().toISOString(),
       User: json.PartitionKey,
     });
 

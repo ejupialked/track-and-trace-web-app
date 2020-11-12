@@ -7,77 +7,167 @@ export default class extends AbstractView {
   }
 
   async init() {
+    document.getElementById("users").style.visibility = "hidden";
 
+    fetch("http://localhost:7071/api/fetchUsers")
+      .then((response) => {
+        console.log("Response: " + response);
+        if (!response.ok) {
+          throw Error("Error");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+
+        var sel = document.getElementById("users");
+        for (var i = 0; i < data.length; i++) {
+          var opt = document.createElement("option");
+          opt.innerHTML = data[i].Name;
+          opt.value = data[i].PartitionKey + ":" + data[i].Name;
+          sel.appendChild(opt);
+        }
+        document.getElementById("usersLoader").remove();
+        document.getElementById("users").style.visibility = "visible";
+      });
+
+    const userLocationsForm = document.getElementById("userLocationsForm");
+    userLocationsForm.addEventListener("submit", function (e) {
+      removeOutput();
+      e.preventDefault();
+      fetchUserLocations();
+      userLocationsForm.reset();
+    });
   }
 
   async getHtml() {
     return `
       <h1>Show user locations over time</h1>
-      <p>Select a user and select two dates to show a list of venues the user has visited</p>
+      <p>
+        Select a user and select two dates to show a list of venues the user has
+        visited
+      </p>
       <div id="output"></div>
       <div class="container">
         <form id="userLocationsForm">
-          <label for="venues">User: </label>
-          <select name="users" id="users">
-            <option value="pub">Pub</option>
-            <option value="business">Business centre</option>
-            <option value="sport">Sport Club</option>
-            <option value="academic">Academic venue</option>
-          </select> <br>
+          <div style="display: inline-block;">
+            <label for="users">User: </label>
+          </div>
+          <div style="display: inline-block;">
+            <select name="users" id="users"></select>
+          </div>
+          <div style="display: inline-block;">
+            <div id="usersLoader" class="loader"></div>
+          </div>
+          <br />
           <label for="Date">Start date: </label>
-          <input type="date" id="startDate" name="date"><br>
+          <input type="date" id="startDate" name="date" /><br />
           <label for="Date">End date</label>
-          <input type="date" id="endDate" name="date"><br>
-          <input type="submit" value="Search" />
+          <input type="date" id="endDate" name="date" /><br />
+          <div id="submit">
+            <input type="submit" value="Search" />
+          </div>
         </form>
       </div>
-      <div>
-      <table>
-  <tr>
-    <th>Company</th>
-    <th>Contact</th>
-    <th>Country</th>
-  </tr>
-  <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-    <td>Germany</td>
-  </tr>
-  <tr>
-    <td>Centro comercial Moctezuma</td>
-    <td>Francisco Chang</td>
-    <td>Mexico</td>
-  </tr>
-  <tr>
-    <td>Ernst Handel</td>
-    <td>Roland Mendel</td>
-    <td>Austria</td>
-  </tr>
-  <tr>
-    <td>Island Trading</td>
-    <td>Helen Bennett</td>
-    <td>UK</td>
-  </tr>
-  <tr>
-    <td>Laughing Bacchus Winecellars</td>
-    <td>Yoshi Tannamuri</td>
-    <td>Canada</td>
-  </tr>
-  <tr>
-    <td>Magazzini Alimentari Riuniti</td>
-    <td>Giovanni Rovelli</td>
-    <td>Italy</td>
-  </tr>
-</table>
+      <div id="detailsTable"></div>
+      <div id="locationsTable">
+        
       </div>
     `;
   }
 }
 
-function processResponse(response) {
+function processResponse(response, details) {
   if (response.status != 200) {
     response.text().then((text) => AbstractView.showError(text));
+    injectSubmit();
   } else {
-    response.text().then((text) => AbstractView.showSuccess(text));
+    response.text().then((text) => {
+      var json = JSON.parse(text);
+
+      console.log(json.length);
+
+      if (json.length === 0) {
+        AbstractView.showWarning("This user has no check-ins.");
+      } else {
+        document.getElementById("detailsTable").innerHTML = details;
+
+        var htmlTable = "<table><tr><th>Date</th><th>Location</th></tr>";
+        htmlTable += json
+          .map(
+            (v) => ` 
+        <tr>
+          <td>${v.Date}</td>
+          <td>${v.Venue}</td>
+        </tr>`
+          )
+          .join("");
+        htmlTable += "</table>";
+
+        document.getElementById("locationsTable").innerHTML = htmlTable;
+
+        AbstractView.showInfo("Found " + json.length + " locations.");
+      }
+      injectSubmit();
+    });
   }
+}
+function fetchUserLocations() {
+  document.getElementById("submit").innerHTML =
+    '<div id="submitLoader" class="loader"></div>';
+
+  let userId = document.getElementById("users").value;
+  let startDate = document.getElementById("startDate").value;
+  let endDate = document.getElementById("endDate").value;
+
+  var details = `<br />
+    <p>
+      Locations that
+      <b>${userId.split(":")[1]}</b> has visited from <b>${startDate}</b> to
+      <b>${endDate}</b>.
+    </p>`;
+
+  if (!isValidDate(startDate) || !isValidDate(endDate)) {
+    AbstractView.showError(
+      "Please ensure that start and end date have the right format."
+    );
+    injectSubmit();
+  } else {
+    console.log("user id " + userId.split(":")[0]);
+    const body = JSON.stringify({
+      userId: userId.split(":")[0],
+      startDate: startDate,
+      endDate: endDate,
+    });
+
+    fetch("http://localhost:7071/api/fetchUserLocations", {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-type": "application/json",
+      },
+      body: body,
+    })
+      .then((response) => processResponse(response, details))
+      .catch((error) => processResponse(error, ""));
+  }
+}
+
+function injectSubmit() {
+  document.getElementById("submit").innerHTML =
+    '<input type="submit" value="Register" />';
+}
+function removeOutput() {
+  document.getElementById("detailsTable").innerHTML = "";
+  document.getElementById("locationsTable").innerHTML = "";
+}
+
+function isValidDate(date) {
+  var regEx = /^\d{4}-\d{2}-\d{2}$/;
+  if (!date.match(regEx)) return false; // Invalid format
+  var d = new Date(date);
+  var dNum = d.getTime();
+  if (!dNum && dNum !== 0) return false; // NaN value, Invalid date
+  return d.toISOString().slice(0, 10) === date;
 }

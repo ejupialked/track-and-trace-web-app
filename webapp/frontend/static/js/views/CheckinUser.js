@@ -7,6 +7,8 @@ export default class extends AbstractView {
   }
 
   async init() {
+    document.getElementById("users").style.visibility = "hidden";
+    document.getElementById("venues").style.visibility = "hidden";
     fetch("http://localhost:7071/api/fetchUsers")
       .then((response) => {
         console.log("Response: " + response);
@@ -26,6 +28,9 @@ export default class extends AbstractView {
           opt.value = data[i].PartitionKey;
           sel.appendChild(opt);
         }
+        document.getElementById("usersLoader").remove();
+        document.getElementById("users").style.visibility = "visible"; 
+
       });
 
     fetch("http://localhost:7071/api/fetchVenues")
@@ -47,6 +52,9 @@ export default class extends AbstractView {
           opt.value = data[i].PartitionKey;
           sel.appendChild(opt);
         }
+        document.getElementById("venuesLoader").remove();
+        document.getElementById("venues").style.visibility = "visible"; 
+
       });
 
            const checkInForm = document.getElementById("checkInForm");
@@ -65,11 +73,25 @@ export default class extends AbstractView {
       <div id="output"></div>
       <div class="container">
         <form id="checkInForm">
-          <label for="users">Select user: </label>
-          <select name="users" id="users"></select>
+          <div style="display: inline-block;">
+            <label for="users">Select user: </label>
+          </div>
+          <div style="display: inline-block;">
+            <select name="users" id="users"></select>
+          </div>
+          <div style="display: inline-block;">
+            <div id="usersLoader" class="loader"></div>
+          </div>
           <br />
-          <label for="venues">Select venue: </label>
-          <select name="venues" id="venues"></select>
+          <div style="display: inline-block;">
+            <label for="venues">Select venue: </label>
+          </div>
+          <div style="display: inline-block;">
+            <select name="venues" id="venues"></select>
+          </div>
+          <div style="display: inline-block;">
+            <div id="venuesLoader" class="loader"></div>
+          </div>
           <br />
           <label for="Date">Date user has visited the venue: </label>
           <input
@@ -78,7 +100,9 @@ export default class extends AbstractView {
             name="date"
             placeholder="yyyy-mm-dd"
           /><br /><br />
-          <input type="submit" value="Register" />
+          <div id="submit">
+            <input type="submit" value="Register" />
+          </div>
         </form>
       </div>
     `;
@@ -86,6 +110,9 @@ export default class extends AbstractView {
 }
 
 function checkinUser() {
+
+  document.getElementById('submit').innerHTML = '<div id="submitLoader" class="loader"></div>';
+
   let user = document.getElementById("users").value;
   let venue = document.getElementById("venues").value;
   let date = document.getElementById("date").value;
@@ -111,7 +138,13 @@ function checkinUser() {
 function processResponse(response) {
   if (response.status != 200) {
     response.text().then((text) => AbstractView.showError(text));
+    injectSubmit();
   } else {
     response.text().then((text) => AbstractView.showSuccess(text));
+    injectSubmit();
   }
+}
+
+function injectSubmit(){
+    document.getElementById('submit').innerHTML = '<input type="submit" value="Register" />';
 }

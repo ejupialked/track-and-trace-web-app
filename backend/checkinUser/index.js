@@ -5,9 +5,9 @@ module.exports = async function (context, req) {
 
   context.bindings.checkinsTable = [];
   const checkinsTable = context.bindings.checkinsTable;
+  const venueEntity = context.bindings.venueEntity;
 
   const date = req.query.date || req.body.date;
-  const venue = req.query.venue || req.body.venue;
   const user = context.bindings.userEntity;
 
   
@@ -25,17 +25,24 @@ module.exports = async function (context, req) {
       var userJSON = JSON.stringify(user);
 
       console.log("date: " + date);
-      console.log("venue: " + venue);
+      console.log("venue: " + JSON.stringify(venueEntity));
+
+
+      var jsonString = JSON.stringify(venueEntity);
+      var jsonValue = JSON.parse(jsonString.substring(1, jsonString.length - 1));
 
       //parse this
       var json = JSON.parse(userJSON.substring(1, userJSON.length - 1));
 
+      console.log(jsonValue.RowKey);
+      console.log(jsonValue.PartitionKey);
 
     checkinsTable.push({
-      PartitionKey: json.PartitionKey,
-      RowKey: uuidv4(),
-      Date: date,
-      Venue: venue,
+      PartitionKey: json.PartitionKey, //UserID
+      RowKey: uuidv4(), //Checkin ID
+      Date: date, //Date of checkin
+      VenueId: jsonValue.PartitionKey, //VenueID
+      Venue: jsonValue.RowKey //VenueName
     });
 
     context.res = {
