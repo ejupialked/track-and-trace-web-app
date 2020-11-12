@@ -14,6 +14,13 @@
       "type": "http",
       "direction": "out",
       "name": "res"
+    },
+    {
+      "type": "table",
+      "direction": "in",
+      "name": "inputTable",
+      "tableName": "venuesTable",
+      "connection": "covidtrackandtrace_STORAGE"
     }
   ]
 }

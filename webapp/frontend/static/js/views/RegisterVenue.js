@@ -22,7 +22,7 @@ export default class extends AbstractView {
 
       console.log(body);
 
-      fetch("https://covidtrackandtrace.azurewebsites.net/api/registerVenue", {
+      fetch("https://comp3207functions.azurewebsites.net/api/registerVenue", {
         method: "POST",
         headers: {
           Accept: "application/json, text/plain, */*",

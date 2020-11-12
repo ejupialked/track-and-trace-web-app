@@ -7,7 +7,47 @@ export default class extends AbstractView {
   }
 
   async init() {
-  
+    fetch("http://localhost:7071/api/fetchUsers")
+      .then((response) => {
+        console.log("Response: " + response);
+        if (!response.ok) {
+          throw Error("Error");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+
+        var sel = document.getElementById("users");
+        for (var i = 0; i < data.length; i++) {
+          var opt = document.createElement("option");
+          opt.innerHTML = data[i].Name;
+          opt.value = data[i].PartitionKey;
+          sel.appendChild(opt);
+        }
+      });
+
+    fetch("http://localhost:7071/api/fetchVenues")
+      .then((response) => {
+        console.log("Response: " + response);
+        if (!response.ok) {
+          throw Error("Error");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+
+        var sel = document.getElementById("venues");
+        for (var i = 0; i < data.length; i++) {
+          var opt = document.createElement("option");
+          opt.innerHTML = data[i].RowKey;
+          opt.value = data[i].PartitionKey;
+          sel.appendChild(opt);
+        }
+      });
   }
 
   async getHtml() {
@@ -19,17 +59,9 @@ export default class extends AbstractView {
         <form id="venueForm">
         <label for="users">Select user: </label>
           <select name="users" id="users">
-            <option value="1">Alked</option>
-            <option value="2">Jim</option>
-            <option value="3">Jason</option>
-            <option value="4">John</option>
           </select> <br>
           <label for="venues">Select venue: </label>
           <select name="venues" id="venues">
-            <option value="1">Alked</option>
-            <option value="2">Jim</option>
-            <option value="3">Jason</option>
-            <option value="4">John</option>
           </select> <br>
            <label for="Date">Date user has visited the venue: </label>
           <input type="date" id="date" name="date"  placeholder="yyyy-mm-dd"><br><br>
