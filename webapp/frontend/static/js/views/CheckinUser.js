@@ -7,6 +7,12 @@ export default class extends AbstractView {
   }
 
   async init() {
+    
+ 
+
+
+
+
     fetch("http://localhost:7071/api/fetchUsers")
       .then((response) => {
         console.log("Response: " + response);
@@ -48,6 +54,14 @@ export default class extends AbstractView {
           sel.appendChild(opt);
         }
       });
+
+           const checkInForm = document.getElementById("checkInForm");
+           checkInForm.addEventListener("submit", function (e) {
+             e.preventDefault();
+             checkinUser();
+             checkInForm.reset();
+           });
+    
   }
 
   async getHtml() {
@@ -56,20 +70,48 @@ export default class extends AbstractView {
       <p>Complete all the required to check-in a user</p>
       <div id="output"></div>
       <div class="container">
-        <form id="venueForm">
-        <label for="users">Select user: </label>
-          <select name="users" id="users">
-          </select> <br>
+        <form id="checkInForm">
+          <label for="users">Select user: </label>
+          <select name="users" id="users"></select>
+          <br />
           <label for="venues">Select venue: </label>
-          <select name="venues" id="venues">
-          </select> <br>
-           <label for="Date">Date user has visited the venue: </label>
-          <input type="date" id="date" name="date"  placeholder="yyyy-mm-dd"><br><br>
-          <input type="submit" value="Register"/>
+          <select name="venues" id="venues"></select>
+          <br />
+          <label for="Date">Date user has visited the venue: </label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            placeholder="yyyy-mm-dd"
+          /><br /><br />
+          <input type="submit" value="Register" />
         </form>
       </div>
     `;
   }
+}
+
+function checkinUser() {
+  let user = document.getElementById("users").value;
+  let venue = document.getElementById("venues").value;
+  let date = document.getElementById("date").value;
+
+  const body = JSON.stringify({
+    venue: venue,
+    date: date,
+    userId: user
+  });
+
+  fetch("http://localhost:7071/api/checkinUser", {
+    method: "POST",
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-type": "application/json",
+    },
+    body: body,
+  })
+    .then((response) => processResponse(response))
+    .catch((error) => processResponse(error));
 }
 
 function processResponse(response) {

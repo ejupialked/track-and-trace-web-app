@@ -1,0 +1,41 @@
+{
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "get",
+        "post"
+      ]
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "type": "table",
+      "direction": "in",
+      "name": "userEntity",
+      "tableName": "usersTable",
+      "connection": "covidtrackandtrace_STORAGE",
+      "partitionKey": "{userId}"
+    },
+    {
+      "type": "table",
+      "direction": "in",
+      "name": "in2",
+      "tableName": "venuesTable",
+      "connection": "covidtrackandtrace_STORAGE"
+    },
+    {
+      "type": "table",
+      "direction": "out",
+      "name": "checkinsTable",
+      "tableName": "checkinsTable",
+      "connection": "covidtrackandtrace_STORAGE"
+    }
+  ]
+}
