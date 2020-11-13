@@ -129,12 +129,14 @@ function processResponse(response, details) {
       } else {
         document.getElementById("detailsTable").innerHTML = details;
 
-        var htmlTable = "<table><tr><th>Date</th><th>Visitor</th></tr>";
+        var htmlTable =
+          "<table><tr><th>Date</th><th>Time</th><th>Visitor</th></tr>";
         htmlTable += json
           .map(
             (v) => ` 
         <tr>
-          <td>${v.Date}</td>
+          <td>${v.Date.split('$')[0]}</td>
+          <td>${v.Date.split('$')[1]}</td>
           <td>${v.VisitorName}</td>
         </tr>`
           )
@@ -176,17 +178,14 @@ function fetchVenueVisitors() {
       endDate: endDate + "$" + endTime,
     });
 
-    fetch(
-      "https://comp3207functions.azurewebsites.net/api/fetchVenueVisitors",
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-type": "application/json",
-        },
-        body: body,
-      }
-    )
+    fetch("http://localhost:7071/api/fetchVenueVisitors", {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-type": "application/json",
+      },
+      body: body,
+    })
       .then((response) => processResponse(response, details))
       .catch((error) => processResponse(error, ""));
   

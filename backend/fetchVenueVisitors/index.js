@@ -15,7 +15,7 @@ module.exports = async function (context, req) {
   console.log("visitors Json: " + visitorsJSON);
 
 
-   if (!isValidDate(startDate.split('$')[0]) || !isValidDate(endDate.split('$')[0])) {
+   if (!isValidDate(startDate.split('$')[0]) && !isValidDate(endDate.split('$')[0])) {
      context.res = {
        status: 400,
        body: "The start and end date should have this format yyyy-mm-dd.",

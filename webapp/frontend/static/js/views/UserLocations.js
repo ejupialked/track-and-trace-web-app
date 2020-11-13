@@ -135,7 +135,7 @@ function processResponse(response, details) {
         AbstractView.showWarning("This user has no check-ins.");
       } else {
         document.getElementById("detailsTable").innerHTML = details;
-
+        
         var htmlTable =
           "<table><tr><th>Date</th><th>Time</th><th>Location</th></tr>";
         htmlTable += json
@@ -151,10 +151,11 @@ function processResponse(response, details) {
         htmlTable += "</table>";
 
         document.getElementById("locationsTable").innerHTML = htmlTable;
+        injectSubmit();
+
 
         AbstractView.showInfo("Found " + json.length + " locations.");
       }
-      injectSubmit();
     });
   }
 }
