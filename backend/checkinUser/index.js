@@ -10,7 +10,7 @@ module.exports = async function (context, req) {
   const date = req.query.date || req.body.date;
   const user = context.bindings.userEntity;
 
-  
+
 
 
   if (user.length == 0) {
@@ -31,6 +31,8 @@ module.exports = async function (context, req) {
       var jsonString = JSON.stringify(venueEntity);
       var jsonValue = JSON.parse(jsonString.substring(1, jsonString.length - 1));
 
+
+
       //parse this
       var json = JSON.parse(userJSON.substring(1, userJSON.length - 1));
 
@@ -42,7 +44,8 @@ module.exports = async function (context, req) {
       RowKey: uuidv4(), //Checkin ID
       Date: date, //Date of checkin
       VenueId: jsonValue.PartitionKey, //VenueID
-      Venue: jsonValue.RowKey //VenueName
+      Venue: jsonValue.RowKey, //VenueName
+      VisitorName: json.Name // Name of the visitors
     });
 
     context.res = {
