@@ -14,7 +14,7 @@ export default class extends AbstractView {
 
     document.getElementById("users").style.visibility = "hidden";
 
-    fetch("http://localhost:7071/api/fetchUsers")
+    fetch("https://comp3207functions.azurewebsites.net/api/fetchUsers")
       .then((response) => {
         console.log("Response: " + response);
         if (!response.ok) {
@@ -39,6 +39,7 @@ export default class extends AbstractView {
 
     const userLocationsForm = document.getElementById("userLocationsForm");
     userLocationsForm.addEventListener("submit", function (e) {
+      AbstractView.removeResponse();
       removeOutput();
       e.preventDefault();
       fetchUserLocations();
@@ -154,7 +155,7 @@ function fetchUserLocations() {
       endDate: endDate,
     });
 
-    fetch("http://localhost:7071/api/fetchUserLocations", {
+    fetch("https://comp3207functions.azurewebsites.net/api/fetchUserLocations", {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",

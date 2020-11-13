@@ -7,7 +7,13 @@ export default class extends AbstractView {
   }
 
   async init() {
-    fetch("http://localhost:7071/api/fetchUsers")
+    document.getElementById("users").style.visibility = "hidden";
+
+    //set min for calendar
+    var today = new Date().toISOString().split("T")[0];
+    document.getElementsByName("date")[0].setAttribute("max", today);
+
+    fetch("https://comp3207functions.azurewebsites.net/api/fetchUsers")
       .then((response) => {
         console.log("Response: " + response);
         if (!response.ok) {
@@ -26,13 +32,18 @@ export default class extends AbstractView {
           opt.value = data[i].PartitionKey;
           sel.appendChild(opt);
         }
+        document.getElementById("usersLoader").remove();
+        document.getElementById("users").style.visibility = "visible";
       });
 
     const reportForm = document.getElementById("reportForm");
     reportForm.addEventListener("submit", function (e) {
+      AbstractView.removeResponse();
+      document.getElementById("submit").innerHTML =
+        '<div id="submitLoader" class="loader"></div>';
       e.preventDefault();
       sendReport();
-      checkInForm.reset();
+      reportForm.reset();
     });
   }
 
@@ -43,12 +54,22 @@ export default class extends AbstractView {
       <div id="output"></div>
       <div class="container">
         <form id="reportForm">
-        <label for="users">Select user: </label>
-          <select name="users" id="users">
-          </select> <br>
+
+        <div style="display: inline-block;">
+            <label for="users">User: </label>
+          </div>
+          <div style="display: inline-block;">
+            <select name="users" id="users"></select>
+          </div>
+          <div style="display: inline-block;">
+            <div id="usersLoader" class="loader"></div>
+          </div>
+        <br>
            <label for="Date">Date results: </label>
-          <input type="date" id="date" name="date"><br><br>
-          <input type="submit" value="Send"/>
+          <input type="date" id="date" name="date" placeholder="yyyy-mm-dd"><br><br>
+               <div id="submit">
+            <input type="submit" value="Send" />
+          </div>
         </form>
       </div>
     `;
@@ -61,8 +82,9 @@ function processResponse(response) {
   } else {
     response.text().then((text) => AbstractView.showSuccess(text));
   }
-}
 
+  injectSubmit();
+}
 
 function sendReport() {
   let user = document.getElementById("users").value;
@@ -70,7 +92,7 @@ function sendReport() {
 
   const body = JSON.stringify({
     date: date,
-    userId: user
+    userId: user,
   });
 
   fetch("http://localhost:7071/api/reportPositiveTest", {
@@ -83,4 +105,9 @@ function sendReport() {
   })
     .then((response) => processResponse(response))
     .catch((error) => processResponse(error));
+}
+
+function injectSubmit() {
+  document.getElementById("submit").innerHTML =
+    '<input type="submit" value="Register" />';
 }

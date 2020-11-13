@@ -6,22 +6,58 @@ export default class extends AbstractView {
     this.setTitle("infected Users");
   }
 
-  async init() {}
+  async init() {
+    document.getElementById("users").style.visibility = "hidden";
+
+    fetch("http://localhost:7071/api/fetchPositiveUsers")
+      .then((response) => {
+        console.log("Response: " + response);
+        if (!response.ok) {
+          document.getElementById("usersLoader").remove();
+          document.getElementById("users").style.visibility = "visible";
+          throw Error("Error");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+
+        var sel = document.getElementById("users");
+        for (var i = 0; i < data.length; i++) {
+          var opt = document.createElement("option");
+          opt.innerHTML = data[i].name;
+          opt.value = data[i].userId;
+          sel.appendChild(opt);
+        }
+
+        document.getElementById("usersLoader").remove();
+        document.getElementById("users").style.visibility = "visible";
+      });
+  }
 
   async getHtml() {
     return `
       <h1>Infected Users</h1>
-      <p>Select a positive user and click submit to see the users who have got in contact with him/her. <br> The users appearing in this list have previously submitted a positive test.</p>
+      <p>
+        Select a positive user and click submit to see the users who have got in
+        contact with him/her. <br />
+        The users appearing in this list have previously submitted a positive
+        test.
+      </p>
       <div id="output"></div>
       <div class="container">
         <form id="userLocationsForm">
-          <label for="venues">Positive users: </label>
-          <select name="venues" id="venues">
-            <option value="pub">Pub</option>
-            <option value="business">Business centre</option>
-            <option value="sport">Sport Club</option>
-            <option value="academic">Academic venue</option>
-          </select> <br>
+          <div style="display: inline-block;">
+            <label for="users">Positive Users: </label>
+          </div>
+          <div style="display: inline-block;">
+            <select name="users" id="users"></select>
+          </div>
+          <div style="display: inline-block;">
+            <div id="usersLoader" class="loader"></div>
+          </div>
+          <br />
           <input type="submit" value="Search" />
         </form>
       </div>

@@ -13,7 +13,7 @@ export default class extends AbstractView {
     document.getElementById("startDate").setAttribute("max", today);
     document.getElementById("endDate").setAttribute("max", today);
 
-    fetch("http://localhost:7071/api/fetchVenues")
+    fetch("https://comp3207functions.azurewebsites.net/api/fetchVenues")
       .then((response) => {
         console.log("Response: " + response);
         if (!response.ok) {
@@ -155,7 +155,7 @@ function fetchVenueVisitors() {
       endDate: endDate,
     });
 
-    fetch("http://localhost:7071/api/fetchVenueVisitors", {
+    fetch("https://comp3207functions.azurewebsites.net/api/fetchVenueVisitors", {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",

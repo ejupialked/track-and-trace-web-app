@@ -37,6 +37,7 @@ module.exports = async function (context, req) {
         RowKey: uuidv4(),
         Date: date,
         User: json.PartitionKey,
+        UserName: json.Name
       });
 
       context.res = {

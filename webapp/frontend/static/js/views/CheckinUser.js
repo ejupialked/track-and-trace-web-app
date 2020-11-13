@@ -14,7 +14,7 @@ export default class extends AbstractView {
 
     document.getElementById("users").style.visibility = "hidden";
     document.getElementById("venues").style.visibility = "hidden";
-    fetch("http://localhost:7071/api/fetchUsers")
+    fetch("https://comp3207functions.azurewebsites.net/api/fetchUsers")
       .then((response) => {
         console.log("Response: " + response);
         if (!response.ok) {
@@ -38,7 +38,7 @@ export default class extends AbstractView {
 
       });
 
-    fetch("http://localhost:7071/api/fetchVenues")
+    fetch("https://comp3207functions.azurewebsites.net/api/fetchVenues")
       .then((response) => {
         console.log("Response: " + response);
         if (!response.ok) {
@@ -58,8 +58,7 @@ export default class extends AbstractView {
           sel.appendChild(opt);
         }
         document.getElementById("venuesLoader").remove();
-        document.getElementById("venues").style.visibility = "visible"; 
-
+        document.getElementById("venues").style.visibility = "visible";
       });
 
            const checkInForm = document.getElementById("checkInForm");
@@ -128,7 +127,7 @@ function checkinUser() {
     userId: user
   });
 
-  fetch("http://localhost:7071/api/checkinUser", {
+  fetch("https://comp3207functions.azurewebsites.net/api/checkinUser", {
     method: "POST",
     headers: {
       Accept: "application/json, text/plain, */*",
