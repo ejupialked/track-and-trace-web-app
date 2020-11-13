@@ -1,5 +1,4 @@
 import Homepage from "./views/Homepage.js";
-import VenueCheckin from "./views/VenueCheckin.js";
 import RegisterUser from "./views/RegisterUser.js";
 import RegisterVenue from "./views/RegisterVenue.js";
 import CheckinUser from "./views/CheckinUser.js";
@@ -16,7 +15,6 @@ const navigateTo = (url) => {
 const router = async () => {
   const routes = [
     { path: "/", view: Homepage },
-    { path: "/venueCheckin", view: VenueCheckin },
     { path: "/registerVenue", view: RegisterVenue },
     { path: "/registerUser", view: RegisterUser },
     { path: "/checkinUser", view: CheckinUser },

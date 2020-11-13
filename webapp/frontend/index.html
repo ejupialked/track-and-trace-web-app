@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Covid Track and Trace</title>
-    <link rel="stylesheet" href="./static/css/index.css">
-    
-</head>
-<body>
-    <nav class="nav">
-        <a href="/" class="nav__link" data-link>Home page</a>
-        <a href="/registerUser" class="nav__link" data-link>Register User</a>
-        <a href="/registerVenue" class="nav__link" data-link>Register Venue</a>
-        <a href="/checkinUser" class="nav__link" data-link>Check-in User</a>
-        <a href="/userLocations" class="nav__link" data-link>User Locations</a>
-        <a href="/venueVisitors" class="nav__link" data-link>Venue Visitors</a>
-        <a href="/infectedUsers" class="nav__link" data-link>Infected users</a>
-        <a href="/reportPositiveTest" class="nav__link" data-link>Report positive test</a>
-
-    </nav>
-    <div id="app"></div>
+    <link rel="stylesheet" href="./static/css/index.css" />
+  </head>
+  <body>
+    <div id="sidebar" class="sidebar">
+      <a href="/" class="nav__link" data-link>Home page</a>
+      <a href="registerUser" data-link>Register User</a>
+      <a href="/registerVenue" data-link>Register Venue</a>
+      <a href="/checkinUser" data-link>Check-in User</a>
+      <a href="/userLocations" data-link>User Locations</a>
+      <a href="/venueVisitors" data-link>Venue Visitors</a>
+      <a href="/infectedUsers" data-link>Infected users</a>
+      <a href="/reportPositiveTest" data-link>Report positive test</a>
+    </div>
+    <div id="app" class="content"></div>
     <script type="module" src="/static/js/index.js"></script>
-</body>
+
+    <div class="footer">
+  <p>Created by Alked Ejupi. COMP3207: Cloud Application Development (2020-2021)</p>
+</div>
+  </body>
 </html>

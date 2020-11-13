@@ -8,6 +8,10 @@ export default class extends AbstractView {
 
   async init() {
     document.getElementById("venues").style.visibility = "hidden";
+    //set max for calendar
+    var today = new Date().toISOString().split("T")[0];
+    document.getElementById("startDate").setAttribute("max", today);
+    document.getElementById("endDate").setAttribute("max", today);
 
     fetch("http://localhost:7071/api/fetchVenues")
       .then((response) => {
@@ -39,7 +43,6 @@ export default class extends AbstractView {
       fetchVenueVisitors();
       venueVisitorsForm.reset();
     });
-    
   }
 
   async getHtml() {
@@ -91,7 +94,6 @@ export default class extends AbstractView {
 function processResponse(response, details) {
   if (response.status != 200) {
     response.text().then((text) => AbstractView.showError(text));
-    injectSubmit();
   } else {
     response.text().then((text) => {
       var json = JSON.parse(text);
@@ -164,6 +166,9 @@ function fetchVenueVisitors() {
       .then((response) => processResponse(response, details))
       .catch((error) => processResponse(error, ""));
   }
+
+      injectSubmit();
+
 
 
 

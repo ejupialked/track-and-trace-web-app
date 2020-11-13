@@ -7,6 +7,11 @@ export default class extends AbstractView {
   }
 
   async init() {
+    //set max for calendar
+    var today = new Date().toISOString().split("T")[0];
+    document.getElementById("startDate").setAttribute("max", today);
+    document.getElementById("endDate").setAttribute("max", today);
+
     document.getElementById("users").style.visibility = "hidden";
 
     fetch("http://localhost:7071/api/fetchUsers")
@@ -62,18 +67,26 @@ export default class extends AbstractView {
           </div>
           <br />
           <label for="Date">Start date: </label>
-          <input type="date" id="startDate" name="date" /><br />
+          <input
+            type="date"
+            id="startDate"
+            name="date"
+            placeholder="yyyy-mm-dd"
+          /><br />
           <label for="Date">End date</label>
-          <input type="date" id="endDate" name="date" /><br />
+          <input
+            type="date"
+            id="endDate"
+            name="date"
+            placeholder="yyyy-mm-dd"
+          /><br />
           <div id="submit">
             <input type="submit" value="Search" />
           </div>
         </form>
       </div>
       <div id="detailsTable"></div>
-      <div id="locationsTable">
-        
-      </div>
+      <div id="locationsTable"></div>
     `;
   }
 }

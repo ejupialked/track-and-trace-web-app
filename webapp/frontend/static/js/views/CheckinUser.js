@@ -7,6 +7,11 @@ export default class extends AbstractView {
   }
 
   async init() {
+
+    //set min for calendar
+    var today = new Date().toISOString().split("T")[0];
+    document.getElementsByName("date")[0].setAttribute("max", today);
+
     document.getElementById("users").style.visibility = "hidden";
     document.getElementById("venues").style.visibility = "hidden";
     fetch("http://localhost:7071/api/fetchUsers")
