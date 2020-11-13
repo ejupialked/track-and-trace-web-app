@@ -49,7 +49,7 @@ module.exports = async function (context, req) {
     });
 
     context.res = {
-      body: "Check in performed!",
+      body: "Done! <b>" + json.Name + "</b> has checked-in at <b>" + jsonValue.RowKey + "</b>, " + date,
     };
   }
 
