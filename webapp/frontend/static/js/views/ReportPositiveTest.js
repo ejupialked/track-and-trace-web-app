@@ -6,7 +6,7 @@ export default class extends AbstractView {
     this.setTitle("Report Positive COVID-19 Test");
   }
 
-  async init() {
+   init() {
     document.getElementById("users").style.visibility = "hidden";
 
     //set min for calendar
@@ -66,7 +66,7 @@ export default class extends AbstractView {
           </div>
         <br>
            <label for="Date">Date results: </label>
-          <input type="date" id="date" name="date" placeholder="yyyy-mm-dd"><br><br>
+          <input type="date" id="date" name="date" placeholder="yyyy-mm-dd" required><br><br>
                <div id="submit">
             <input type="submit" value="Send" />
           </div>

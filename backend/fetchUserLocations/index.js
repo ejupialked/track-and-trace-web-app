@@ -3,9 +3,8 @@ module.exports = async function (context, req) {
   const startDate = req.query.startDate || req.body.startDate;
   const endDate = req.query.endDate || req.body.endDate;
 
-
-  console.log(startDate);
-  console.log(endDate);
+  console.log("start date: " + startDate);
+  console.log("end date: " + endDate);
 
   const user = context.bindings.checkinsTable;
 
@@ -16,7 +15,7 @@ module.exports = async function (context, req) {
   console.log("User Json: " + userJSON);
 
   //Date validation
-  if (!isValidDate(startDate) || !isValidDate(endDate)) {
+  if (!isValidDate(startDate.split('$')[0]) || !isValidDate(endDate.split('$')[0])) {
     context.res = {
       status: 400,
       body: "The start and end date should have this format yyyy-mm-dd.",

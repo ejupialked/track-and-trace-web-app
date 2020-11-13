@@ -1,0 +1,43 @@
+{
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "get",
+        "post"
+      ]
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "type": "table",
+      "direction": "in",
+      "name": "positiveUser",
+      "tableName": "usersTable",
+      "connection": "covidtrackandtrace_STORAGE",
+      "partitionKey": "{userId}"
+    },
+    {
+      "name": "reportsTable",
+      "tableName": "reportsTable",
+      "connection": "covidtrackandtrace_STORAGE",
+      "direction": "in",
+      "type": "table",
+      "filter": "User eq '{userId}'"
+    },
+    {
+      "name": "checkinsTable",
+      "tableName": "checkinsTable",
+      "connection": "covidtrackandtrace_STORAGE",
+      "direction": "in",
+      "type": "table",
+      "partitionKey": "{userId}"
+    }
+  ]
+}

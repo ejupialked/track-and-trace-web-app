@@ -8,6 +8,8 @@ module.exports = async function (context, req) {
   const venueEntity = context.bindings.venueEntity;
 
   const date = req.query.date || req.body.date;
+  const time = req.query.time || req.body.time;
+
   const user = context.bindings.userEntity;
 
 
@@ -42,14 +44,14 @@ module.exports = async function (context, req) {
     checkinsTable.push({
       PartitionKey: json.PartitionKey, //UserID
       RowKey: uuidv4(), //Checkin ID
-      Date: date, //Date of checkin
+      Date: date+"$"+time, //Date of checkin
       VenueId: jsonValue.PartitionKey, //VenueID
       Venue: jsonValue.RowKey, //VenueName
       VisitorName: json.Name // Name of the visitors
     });
 
     context.res = {
-      body: "Done! <b>" + json.Name + "</b> has checked-in at <b>" + jsonValue.RowKey + "</b>, " + date,
+      body: "Done! <b>" + json.Name + "</b> has checked-in at <b>" + jsonValue.RowKey + "</b>, " + date + " " + time,
     };
   }
 

@@ -6,7 +6,7 @@ export default class extends AbstractView {
     this.setTitle("Register Venue");
   }
 
-  async init() {
+   init() {
     const venueForm = document.getElementById("venueForm");
 
     venueForm.addEventListener("submit", function (e) {

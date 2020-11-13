@@ -6,8 +6,8 @@ export default class extends AbstractView {
     this.setTitle("Venue Visitors over time");
   }
 
-  async init() {
-    document.getElementById("venues").style.visibility = "hidden";
+  init() {
+    document.getElementById("entities").style.visibility = "hidden";
     //set max for calendar
     var today = new Date().toISOString().split("T")[0];
     document.getElementById("startDate").setAttribute("max", today);
@@ -25,15 +25,15 @@ export default class extends AbstractView {
       .then((data) => {
         console.log(data);
 
-        var sel = document.getElementById("venues");
+        var sel = document.getElementById("entities");
         for (var i = 0; i < data.length; i++) {
           var opt = document.createElement("option");
           opt.innerHTML = data[i].RowKey;
           opt.value = data[i].PartitionKey + ":" + data[i].RowKey;
           sel.appendChild(opt);
         }
-        document.getElementById("venuesLoader").remove();
-        document.getElementById("venues").style.visibility = "visible";
+        document.getElementById("loader").remove();
+        document.getElementById("entities").style.visibility = "visible";
       });
 
     const venueVisitorsForm = document.getElementById("venueVisitorsForm");
@@ -58,10 +58,10 @@ export default class extends AbstractView {
             <label for="venues">Venue: </label>
           </div>
           <div style="display: inline-block;">
-            <select name="venues" id="venues"></select>
+            <select name="venues" id="entities"></select>
           </div>
           <div style="display: inline-block;">
-            <div id="venuesLoader" class="loader"></div>
+            <div id="loader" class="loader"></div>
           </div>
           <br />
           <label for="Date">Start date: </label>
@@ -70,14 +70,38 @@ export default class extends AbstractView {
             id="startDate"
             name="date"
             placeholder="yyyy-mm-dd"
-          /><br />
+          />
+            <div style="display: inline-block;">
+            <input
+              type="time"
+              id="startTime"
+              name="time"
+              min="00:00"
+              max="23:59"
+              required
+              placeholder="--:--"
+            />
+          </div>
+          <br />
           <label for="Date">End date</label>
           <input
             type="date"
             id="endDate"
             name="date"
             placeholder="yyyy-mm-dd"
-          /><br />
+          />
+            <div style="display: inline-block;">
+            <input
+              type="time"
+              id="endTime"
+              name="time"
+              min="00:00"
+              max="23:59"
+              required
+              placeholder="--:--"
+            />
+          </div>
+          <br />
           <div id="submit">
             <input type="submit" value="Search" />
           </div>
@@ -124,63 +148,50 @@ function processResponse(response, details) {
     });
   }
 
-        injectSubmit();
-
+  injectSubmit();
 }
 
 function fetchVenueVisitors() {
   document.getElementById("submit").innerHTML =
     '<div id="submitLoader" class="loader"></div>';
 
-  let venueId = document.getElementById("venues").value;
+  let venueId = document.getElementById("entities").value;
   let startDate = document.getElementById("startDate").value;
+  let startTime = document.getElementById("startTime").value;
+
+  let endTime = document.getElementById("endTime").value;
   let endDate = document.getElementById("endDate").value;
 
   var details = `<br>
     <p>
       Visitors that have visited
-      <b>${venueId.split(":")[1]}</b> from <b>${startDate}</b> to
-      <b>${endDate}</b>.
+      <b>${venueId.split(":")[1]}</b> from <b>${startDate}, ${startTime}</b> to
+      <b>${endDate}, ${endTime}</b>.
     </p>`;
 
-  if (!isValidDate(startDate) || !isValidDate(endDate)) {
-    AbstractView.showError(
-      "Please ensure that start and end date have the right format."
-    );
-  } else {
     console.log("venue id " + venueId.split(":")[0]);
     const body = JSON.stringify({
       venueId: venueId.split(":")[0],
-      startDate: startDate,
-      endDate: endDate,
+      startDate: startDate + "$" + startTime,
+      endDate: endDate + "$" + endTime,
     });
 
-    fetch("https://comp3207functions.azurewebsites.net/api/fetchVenueVisitors", {
-      method: "POST",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-type": "application/json",
-      },
-      body: body,
-    })
+    fetch(
+      "https://comp3207functions.azurewebsites.net/api/fetchVenueVisitors",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-type": "application/json",
+        },
+        body: body,
+      }
+    )
       .then((response) => processResponse(response, details))
       .catch((error) => processResponse(error, ""));
-  }
+  
 
-      injectSubmit();
-
-
-
-
-}
-
-function isValidDate(date) {
-  var regEx = /^\d{4}-\d{2}-\d{2}$/;
-  if (!date.match(regEx)) return false; // Invalid format
-  var d = new Date(date);
-  var dNum = d.getTime();
-  if (!dNum && dNum !== 0) return false; // NaN value, Invalid date
-  return d.toISOString().slice(0, 10) === date;
+  injectSubmit();
 }
 
 function removeOutput() {

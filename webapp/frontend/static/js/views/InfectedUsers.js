@@ -6,7 +6,7 @@ export default class extends AbstractView {
     this.setTitle("infected Users");
   }
 
-  async init() {
+  init() {
     document.getElementById("users").style.visibility = "hidden";
 
     fetch("http://localhost:7071/api/fetchPositiveUsers")

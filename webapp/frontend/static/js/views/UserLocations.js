@@ -6,13 +6,13 @@ export default class extends AbstractView {
     this.setTitle("User Locations");
   }
 
-  async init() {
+  init() {
     //set max for calendar
     var today = new Date().toISOString().split("T")[0];
     document.getElementById("startDate").setAttribute("max", today);
     document.getElementById("endDate").setAttribute("max", today);
 
-    document.getElementById("users").style.visibility = "hidden";
+    document.getElementById("entities").style.visibility = "hidden";
 
     fetch("https://comp3207functions.azurewebsites.net/api/fetchUsers")
       .then((response) => {
@@ -26,15 +26,15 @@ export default class extends AbstractView {
       .then((data) => {
         console.log(data);
 
-        var sel = document.getElementById("users");
+        var sel = document.getElementById("entities");
         for (var i = 0; i < data.length; i++) {
           var opt = document.createElement("option");
           opt.innerHTML = data[i].Name;
           opt.value = data[i].PartitionKey + ":" + data[i].Name;
           sel.appendChild(opt);
         }
-        document.getElementById("usersLoader").remove();
-        document.getElementById("users").style.visibility = "visible";
+        document.getElementById("loader").remove();
+        document.getElementById("entities").style.visibility = "visible";
       });
 
     const userLocationsForm = document.getElementById("userLocationsForm");
@@ -61,10 +61,10 @@ export default class extends AbstractView {
             <label for="users">User: </label>
           </div>
           <div style="display: inline-block;">
-            <select name="users" id="users"></select>
+            <select name="users" id="entities"></select>
           </div>
           <div style="display: inline-block;">
-            <div id="usersLoader" class="loader"></div>
+            <div id="loader" class="loader"></div>
           </div>
           <br />
           <label for="Date">Start date: </label>
@@ -73,14 +73,43 @@ export default class extends AbstractView {
             id="startDate"
             name="date"
             placeholder="yyyy-mm-dd"
-          /><br />
+            required
+          />
+         
+          <div style="display: inline-block;">
+            <input
+              type="time"
+              id="startTime"
+              name="time"
+              min="00:00"
+              max="23:59"
+              required
+              placeholder="--:--"
+            />
+          </div>
+          
+          <br />
           <label for="Date">End date</label>
           <input
             type="date"
             id="endDate"
             name="date"
             placeholder="yyyy-mm-dd"
-          /><br />
+            required
+          />
+            <div style="display: inline-block;">
+            <input
+              type="time"
+              id="endTime"
+              name="time"
+              min="00:00"
+              max="23:59"
+              required
+              placeholder="--:--"
+            />
+          </div>
+          
+          <br />
           <div id="submit">
             <input type="submit" value="Search" />
           </div>
@@ -107,12 +136,14 @@ function processResponse(response, details) {
       } else {
         document.getElementById("detailsTable").innerHTML = details;
 
-        var htmlTable = "<table><tr><th>Date</th><th>Location</th></tr>";
+        var htmlTable =
+          "<table><tr><th>Date</th><th>Time</th><th>Location</th></tr>";
         htmlTable += json
           .map(
             (v) => ` 
         <tr>
-          <td>${v.Date}</td>
+          <td>${v.Date.split('$')[0]}</td>
+          <td>${v.Date.split('$')[1]}</td>
           <td>${v.Venue}</td>
         </tr>`
           )
@@ -128,34 +159,33 @@ function processResponse(response, details) {
   }
 }
 function fetchUserLocations() {
-  document.getElementById("submit").innerHTML =
-    '<div id="submitLoader" class="loader"></div>';
+  if (validateUserLocationsForm()) {
+    document.getElementById("submit").innerHTML =
+      '<div id="submitLoader" class="loader"></div>';
 
-  let userId = document.getElementById("users").value;
-  let startDate = document.getElementById("startDate").value;
-  let endDate = document.getElementById("endDate").value;
+    let userId = document.getElementById("entities").value;
+    let startDate = document.getElementById("startDate").value;
+    let endDate = document.getElementById("endDate").value;
+    let startTime = document.getElementById("startTime").value;
+    let endTime = document.getElementById("endTime").value;
 
-  var details = `<br />
+    var details = `<br />
     <p>
       Locations that
-      <b>${userId.split(":")[1]}</b> has visited from <b>${startDate}</b> to
-      <b>${endDate}</b>.
+      <b>${
+        userId.split(":")[1]
+      }</b> has visited from <b>${startDate}, ${startTime}</b> to
+      <b>${endDate}, ${endTime}</b>.
     </p>`;
 
-  if (!isValidDate(startDate) || !isValidDate(endDate)) {
-    AbstractView.showError(
-      "Please ensure that start and end date have the right format."
-    );
-    injectSubmit();
-  } else {
     console.log("user id " + userId.split(":")[0]);
     const body = JSON.stringify({
       userId: userId.split(":")[0],
-      startDate: startDate,
-      endDate: endDate,
+      startDate: startDate+"$"+startTime,
+      endDate: endDate+"$"+endTime
     });
 
-    fetch("https://comp3207functions.azurewebsites.net/api/fetchUserLocations", {
+    fetch("http://localhost:7071/api/fetchUserLocations", {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -177,11 +207,30 @@ function removeOutput() {
   document.getElementById("locationsTable").innerHTML = "";
 }
 
-function isValidDate(date) {
-  var regEx = /^\d{4}-\d{2}-\d{2}$/;
-  if (!date.match(regEx)) return false; // Invalid format
-  var d = new Date(date);
-  var dNum = d.getTime();
-  if (!dNum && dNum !== 0) return false; // NaN value, Invalid date
-  return d.toISOString().slice(0, 10) === date;
+function validateUserLocationsForm() {
+  let startTime = document.getElementById("startTime").value;
+  let endTime = document.getElementById("endTime").value;
+  let startDate = document.getElementById("startDate").value;
+  let endDate = document.getElementById("endDate").value;
+
+  if (!AbstractView.isTimeValid(startTime)) {
+    alert( "Please insert a valid format for the start time: hh:mm. (e.g. 17:30)");
+    return false;
+  }
+
+  if (!AbstractView.isTimeValid(endTime)) {
+    alert("Please insert a valid format for the end time: hh:mm. (e.g. 17:30)");
+    return false;
+  }
+
+  if (!AbstractView.isValidDate(startDate)) {
+    alert("Please insert a valid format for the start date: yyyy-mm-dd. (e.g. 2020-11-10)");
+    return false;
+  }
+  if (!AbstractView.isValidDate(endDate)) {
+    alert("Please insert a valid format for the end date: yyyy-mm-dd. (e.g. 2020-11-10)");
+    return false;
+  }
+
+  return true;
 }

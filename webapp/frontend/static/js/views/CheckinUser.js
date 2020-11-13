@@ -6,8 +6,7 @@ export default class extends AbstractView {
     this.setTitle("Check-in User");
   }
 
-  async init() {
-
+  init() {
     //set min for calendar
     var today = new Date().toISOString().split("T")[0];
     document.getElementsByName("date")[0].setAttribute("max", today);
@@ -34,8 +33,7 @@ export default class extends AbstractView {
           sel.appendChild(opt);
         }
         document.getElementById("usersLoader").remove();
-        document.getElementById("users").style.visibility = "visible"; 
-
+        document.getElementById("users").style.visibility = "visible";
       });
 
     fetch("https://comp3207functions.azurewebsites.net/api/fetchVenues")
@@ -61,13 +59,11 @@ export default class extends AbstractView {
         document.getElementById("venues").style.visibility = "visible";
       });
 
-           const checkInForm = document.getElementById("checkInForm");
-           checkInForm.addEventListener("submit", function (e) {
-             e.preventDefault();
-             checkinUser();
-             checkInForm.reset();
-           });
-    
+    const checkInForm = document.getElementById("checkInForm");
+    checkInForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      checkinUser();
+    });
   }
 
   async getHtml() {
@@ -97,12 +93,29 @@ export default class extends AbstractView {
             <div id="venuesLoader" class="loader"></div>
           </div>
           <br />
+
+          <div style="display: inline-block;">
+            <label for="Date">Time (e.g 15:40): </label>
+          </div>
+          <div style="display: inline-block;">
+            <input
+              type="time"
+              id="time"
+              name="time"
+              min="00:00"
+              max="23:59"
+              required
+              placeholder="--:--"
+            />
+          </div>
+          <br />
           <label for="Date">Date user has visited the venue: </label>
           <input
             type="date"
             id="date"
             name="date"
             placeholder="yyyy-mm-dd"
+            required
           /><br /><br />
           <div id="submit">
             <input type="submit" value="Register" />
@@ -114,30 +127,63 @@ export default class extends AbstractView {
 }
 
 function checkinUser() {
+  if (validateCheckinForm()){
+     let user = document.getElementById("users").value;
+     let venue = document.getElementById("venues").value;
+     let date = document.getElementById("date").value;
+     let time = document.getElementById("time").value;
 
-  document.getElementById('submit').innerHTML = '<div id="submitLoader" class="loader"></div>';
+     if (!AbstractView.isTimeValid(time)) {
+       alert("not valid");
+     } else {
+       document.getElementById("submit").innerHTML =
+         '<div id="submitLoader" class="loader"></div>';
 
-  let user = document.getElementById("users").value;
-  let venue = document.getElementById("venues").value;
+       const body = JSON.stringify({
+         venue: venue,
+         date: date,
+         time: time,
+         userId: user,
+       });
+
+       fetch("http://localhost:7071/api/checkinUser", {
+         method: "POST",
+         headers: {
+           Accept: "application/json, text/plain, */*",
+           "Content-type": "application/json",
+         },
+         body: body,
+       })
+         .then((response) => processResponse(response))
+         .catch((error) => processResponse(error));
+
+       checkInForm.reset();
+     }
+
+  }
+  
+ 
+}
+
+
+function validateCheckinForm(){
+  let time = document.getElementById("time").value;
   let date = document.getElementById("date").value;
 
-  const body = JSON.stringify({
-    venue: venue,
-    date: date,
-    userId: user
-  });
-
-  fetch("https://comp3207functions.azurewebsites.net/api/checkinUser", {
-    method: "POST",
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-type": "application/json",
-    },
-    body: body,
-  })
-    .then((response) => processResponse(response))
-    .catch((error) => processResponse(error));
+  if (!AbstractView.isTimeValid(time)){
+    alert('Please insert a valid format for the time: hh:mm. (e.g. 17:30)')
+    return false;
+  }
+  
+  if (!AbstractView.isValidDate(date)){
+    alert("Please insert a valid format for the date: yyyy-mm-dd. (e.g. 2020-11-10)");
+    return false;
+  }
+    return true;
+  
 }
+
+
 
 function processResponse(response) {
   if (response.status != 200) {
@@ -149,6 +195,7 @@ function processResponse(response) {
   }
 }
 
-function injectSubmit(){
-    document.getElementById('submit').innerHTML = '<input type="submit" value="Register" />';
+function injectSubmit() {
+  document.getElementById("submit").innerHTML =
+    '<input type="submit" value="Register" />';
 }

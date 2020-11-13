@@ -6,7 +6,7 @@ export default class extends AbstractView {
     this.setTitle("Add User");
   }
 
-  async init() {
+   init() {
     const profileForm = document.getElementById("profileForm");
 
     profileForm.addEventListener("submit", function (e) {
