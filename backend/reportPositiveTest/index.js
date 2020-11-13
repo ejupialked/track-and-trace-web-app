@@ -8,37 +8,51 @@ module.exports = async function (context, req) {
   const date = req.query.date || req.body.date;
   const user = context.bindings.userEntity;
 
-  if (user.length == 0) {
-    console.log("USER NOT FOUND!");
+  if (!isValidDate(date)) {
     context.res = {
       status: 400,
-      body: "User not Found!",
+      body: "The date should have this format <b>yyyy-mm-dd.</b>",
     };
   } else {
-    console.log("USER FOUND!");
+    if (user.length == 0) {
+      console.log("USER NOT FOUND!");
+      context.res = {
+        status: 400,
+        body: "User not Found!",
+      };
+    } else {
+      console.log("USER FOUND!");
 
-    var userJSON = JSON.stringify(user);
+      var userJSON = JSON.stringify(user);
 
-    console.log("date: " + date);
+      console.log("date: " + date);
 
-    //parse this
-    var json = JSON.parse(userJSON.substring(1, userJSON.length - 1));
+      //parse this
+      var json = JSON.parse(userJSON.substring(1, userJSON.length - 1));
 
-    console.log("userId: " + json.PartitionKey);
+      console.log("userId: " + json.PartitionKey);
 
-    
+      reportsTable.push({
+        PartitionKey: "Positive Test",
+        RowKey: uuidv4(),
+        Date: date,
+        User: json.PartitionKey,
+      });
 
-    reportsTable.push({
-      PartitionKey: "Positive Test",
-      RowKey: uuidv4(),
-      Date: new Date().toISOString(),
-      User: json.PartitionKey,
-    });
-
-    context.res = {
-      body: "Positive Covid Test sent!",
-    };
+      context.res = {
+        body: "Positive Covid Test sent!",
+      };
+    }
   }
 
   context.done();
 };
+
+function isValidDate(date) {
+  var regEx = /^\d{4}-\d{2}-\d{2}$/;
+  if (!date.match(regEx)) return false; // Invalid format
+  var d = new Date(date);
+  var dNum = d.getTime();
+  if (!dNum && dNum !== 0) return false; // NaN value, Invalid date
+  return d.toISOString().slice(0, 10) === date;
+}
