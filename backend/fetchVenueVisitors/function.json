@@ -1,0 +1,27 @@
+{
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "get",
+        "post"
+      ]
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "type": "table",
+      "direction": "in",
+      "name": "checkinsTable",
+      "tableName": "checkinsTable",
+      "connection": "covidtrackandtrace_STORAGE",
+      "filter": "Date ge '{startDate}' and Date le '{endDate}' and VenueId eq '{venueId}'"
+    }
+  ]
+}
