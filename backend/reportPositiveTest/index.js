@@ -32,9 +32,12 @@ module.exports = async function (context, req) {
 
       console.log("userId: " + json.PartitionKey);
 
+
+      var split = date.split('-');
+
       reportsTable.push({
         PartitionKey: "Positive Test",
-        RowKey: uuidv4(),
+        RowKey: split[2]+"-"+split[1]+"-"+split[0] + uuidv4(),
         Date: date,
         User: json.PartitionKey,
         UserName: json.Name
@@ -57,3 +60,4 @@ function isValidDate(date) {
   if (!dNum && dNum !== 0) return false; // NaN value, Invalid date
   return d.toISOString().slice(0, 10) === date;
 }
+
