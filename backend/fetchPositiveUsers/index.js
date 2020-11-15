@@ -2,7 +2,7 @@ module.exports = async function (context, req) {
   context.log("Calling infected users ...");
 
   const userReports = context.bindings.reportsTable;
-
+  
   var userJSON = JSON.stringify(userReports);
 
   var json = JSON.parse(userJSON);

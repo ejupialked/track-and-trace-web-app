@@ -16,12 +16,13 @@
       "name": "res"
     },
     {
-      "type": "table",
+      "name": "reportsTable",
+      "tableName": "reportsTable",
+      "connection": "covidtrackandtrace_STORAGE",
       "direction": "in",
-      "name": "checkinsTable",
-      "tableName": "checkinsTable",
-      "filter": "Date gt '{startDate}' and Date lt '{endDate}' and PartitionKey ne '{positiveUser}' and VenueId eq '{venueId}'",
-      "connection": "covidtrackandtrace_STORAGE"
+      "type": "table",
+      "filter": "User eq '{userId}'",
+      "take": "1"
     }
   ]
 }

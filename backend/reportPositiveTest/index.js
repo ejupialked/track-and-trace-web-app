@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = async function (context, req) {
-  context.log("Calling repor positive test...");
+  context.log("Calling report positive test...");
   context.bindings.reportsTable = [];
   const reportsTable = context.bindings.reportsTable;
 

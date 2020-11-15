@@ -39,14 +39,14 @@ export default class extends AbstractView {
 
       console.log(bo);
 
-      fetch("https://comp3207functions.azurewebsites.net/api/registerUser", {
-        method: "POST",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-type": "application/json",
-        },
-        body: bo,
-      }).then((response) => processResponse(response));
+        fetch("https://comp3207functions.azurewebsites.net/api/registerUser", {
+          method: "POST",
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-type": "application/json",
+          },
+          body: bo,
+        }).then((response) => processResponse(response));
 
       profileForm.reset();
     });

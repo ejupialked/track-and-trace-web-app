@@ -1,38 +1,22 @@
 module.exports = async function (context, req) {
-  //POSITIVE User
-  const positiveUser = context.bindings.positiveUser;
-  //Reports of the positiveUser
-  const reportsTable = context.bindings.reportsTable;
-  //Checkins of the positiveUser
+  //   "filter": "Date gt '{startDate}' and Date lt {endDate} and PartitionKey ne '{positiveUser}' and VenueId eq '{venueId}'",
+
+  context.log("Calling searchRecentUserCheckins..");
+  const startDate = req.query.startDate || req.body.startDate;
+  const endDate = req.query.endDate || req.body.endDate;
+  const positiveUser = req.query.positiveUser || req.body.positiveUser;
+  const venueId = req.query.venueId || req.body.venueId;
+
+  console.log("start date: " + startDate);
+  console.log("end date: " + endDate);
+  console.log("positiveUser: " + positiveUser);
+  console.log("venueId: " + endDate);
+
   const checkinsTable = context.bindings.checkinsTable;
 
-  console.log(JSON.stringify(positiveUser));
-  console.log(JSON.stringify(reportsTable));
-  console.log(JSON.stringify(checkinsTable));
-
-  if (positiveUser.length == 1) {
-    context.res = {
-      body: reportsTable,
-    };
-  } else if (positiveUser.length == 0) {
-    console.log("The user is not valid.");
-    context.res = {
-      body: "[]",
-    };
-  } else if (positiveUser.length > 1) {
-    //Should not return more than one user
-    console.log("The user is not valid.");
-    context.res = {
-      body: "[]",
-    };
-  } else {
-    console.error("error in logic");
-
-    context.res = {
-      status: 400,
-      body: "error",
-    };
-  }
+  context.res = {
+    body: checkinsTable,
+  };
 
   context.done();
 };

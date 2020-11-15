@@ -50,9 +50,9 @@ module.exports = async function (context, req) {
       VisitorName: json.Name // Name of the visitors
     });
 
-    context.res = {
-      body: "Done! <b>" + json.Name + "</b> has checked-in at <b>" + jsonValue.RowKey + "</b>, " + date + " " + time,
-    };
+      context.res = {
+        body: "Done! <b>" + json.Name + "</b> has checked-in at <b>" + jsonValue.RowKey + "</b>, " + date + " " + time,
+      };
   }
 
   context.done();

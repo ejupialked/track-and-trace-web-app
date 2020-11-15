@@ -20,8 +20,9 @@
       "direction": "in",
       "name": "checkinsTable",
       "tableName": "checkinsTable",
-      "filter": "Date gt '{startDate}' and Date lt '{endDate}' and PartitionKey ne '{positiveUser}' and VenueId eq '{venueId}'",
-      "connection": "covidtrackandtrace_STORAGE"
+      "filter": "Date ge '{startDate}' and Date le '{endDate}'",
+      "connection": "covidtrackandtrace_STORAGE",
+      "partitionKey": "{userId}"
     }
   ]
 }
