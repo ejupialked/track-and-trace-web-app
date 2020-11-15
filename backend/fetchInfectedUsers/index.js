@@ -45,7 +45,7 @@ module.exports = async function (context, req) {
 
       infectedUsers.push(report);
     let request =
-      "http://localhost:7071/api/fetchRecentUserCheckins?startDate=" +
+      "https://comp3207functions.azurewebsites.net/api/fetchRecentUserCheckins?startDate=" +
       sDate +
       "&endDate=" +
       eDate +
@@ -84,9 +84,7 @@ module.exports = async function (context, req) {
 
       console.log("+++++++++++++ " + date);
 
-      let isoDate =
-        date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(); //yyyy-mm-dd
-      let isoTime = date.getHours() + ":" + date.getMinutes(); //hh-mm
+      
 
       let positiveUser = c.PartitionKey;
       let venuedId = c.VenueId;
@@ -106,7 +104,7 @@ module.exports = async function (context, req) {
       console.log("??????????????????????????????? endDate: " + endDate);
 
       let request2 =
-        "http://localhost:7071/api/searchInfectedUsers?startDate=" +
+        "https://comp3207functions.azurewebsites.net/api/searchInfectedUsers?startDate=" +
         startDate +
         "&endDate=" +
         endDate +
