@@ -9,7 +9,7 @@ export default class extends AbstractView {
   init() {
     document.getElementById("users").style.visibility = "hidden";
 
-    fetch("http://localhost:7071/api/fetchPositiveUsers")
+    fetch("https://comp3207functions.azurewebsites.net/api/fetchPositiveUsers")
       .then((response) => {
         console.log("Response: " + response);
         if (!response.ok) {
@@ -98,30 +98,31 @@ function processResponse(response) {
         var details = "";
         var details2 = "";
 
-
         let r = json[0];
         details += `<br /><p> This table shows the people that
       <b>${r.UserName}</b> has infected. <b>${
-                r.UserName
-              }</b> has reported to be positive on <b>${r.Date}</b>. <br>
+          r.UserName
+        }</b> has reported to be positive on <b>${r.Date}</b>. <br>
       The people infected have had contact with <b>${
         r.UserName
       }</b> 14 days before the date of the report. From <b>${
-                r.startDate.split("$")[0]
-              }</b> (${r.startDate.split("$")[1]}) to <b>${
-                r.endDate.split("$")[0]
-              }</b> (${r.endDate.split("$")[1]}).
+          r.startDate.split("$")[0]
+        }</b> (${r.startDate.split("$")[1]}) to <b>${
+          r.endDate.split("$")[0]
+        }</b> (${r.endDate.split("$")[1]}).
     </p>`;
-
 
         details2 += `<br/><p> This table shows the locations that
       <b>${r.UserName}</b> has visited.
     </p>`;
-            
-            
 
-        document.getElementById("detailsTable").innerHTML = details;
-        document.getElementById("detailsTable2").innerHTML = details2;
+        var infections = 0;
+        json.forEach((e) => {
+          if (!e.hasOwnProperty("PartitionKey")) {
+            infections += 1;
+            console.log("INFECTION!!");
+          }
+        });
 
         var htmlTable =
           "<table><tr><th>Infected User</th><th>Date</th><th>Time</th><th>Venue where infection occurred</th></tr>";
@@ -150,19 +151,29 @@ function processResponse(response) {
           <td>${v.VisitorName}</td>
           <td>${v.Venue}</td>
           <td>${v.Date.split("$")[0]}</td>
-          <td>${v.Date.split("$")[1]}</td>
+          <td>${v.Date.split("$")[1] + " (1 hour)"}</td>
         </tr>`
               : ""
           )
           .join("");
         htmlTable2 += "</table>";
 
-        document.getElementById("infectedUsersTable").innerHTML = htmlTable;
-        document.getElementById("positiveTable").innerHTML = htmlTable2;
+        if (infections != 0) {
+          document.getElementById("infectedUsersTable").innerHTML = htmlTable;
+          document.getElementById("positiveTable").innerHTML = htmlTable2;
+          document.getElementById("detailsTable").innerHTML = details;
+          document.getElementById("detailsTable2").innerHTML = details2;
+
+          AbstractView.showInfo(
+            "Search results for: people infected by <b>" + r.UserName + "</b>"
+          );
+        } else {
+          AbstractView.showWarning(
+            "<b>" + r.UserName + "</b> has not infected anyone."
+          );
+        }
 
         injectSubmit();
-
-        AbstractView.showInfo("Found " + json.length + " people infected.");
       }
     });
   }
@@ -178,7 +189,7 @@ function fetchInfectedUsers() {
     userId: userId,
   });
 
-  fetch("http://localhost:7071/api/fetchInfectedUsers", {
+  fetch("https://comp3207functions.azurewebsites.net/api/fetchInfectedUsers", {
     method: "POST",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -193,6 +204,8 @@ function fetchInfectedUsers() {
 function removeOutput() {
   document.getElementById("detailsTable").innerHTML = "";
   document.getElementById("infectedUsersTable").innerHTML = "";
+  document.getElementById("positiveTable").innerHTML = "";
+  document.getElementById("detailsTable2").innerHTML = "";
 }
 function injectSubmit() {
   document.getElementById("submit").innerHTML =

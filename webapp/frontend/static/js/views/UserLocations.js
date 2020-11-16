@@ -89,7 +89,7 @@ export default class extends AbstractView {
           </div>
           
           <br />
-          <label for="Date">End date</label>
+          <label for="Date">End date: </label>
           <input
             type="date"
             id="endDate"
@@ -186,7 +186,7 @@ function fetchUserLocations() {
       endDate: endDate+"$"+endTime
     });
 
-    fetch("http://localhost:7071/api/fetchUserLocations", {
+    fetch("https://comp3207functions.azurewebsites.net/api/fetchUserLocations", {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",

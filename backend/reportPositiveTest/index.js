@@ -44,7 +44,7 @@ module.exports = async function (context, req) {
       });
 
       context.res = {
-        body: "Positive Covid Test sent!",
+        body: "You have reported that <b>" + json.Name + "</b> is positive. Date of the results: <b>" + date + "</b>. Only the most recent report will be used to track and trace."
       };
     }
   }

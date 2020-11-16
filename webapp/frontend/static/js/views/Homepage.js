@@ -6,10 +6,7 @@ export default class extends AbstractView {
     this.setTitle("Homepage");
   }
 
-  async init() {
-    
-
-  }
+  async init() {}
 
   async getHtml() {
     console.log("Returning html...");
@@ -20,4 +17,3 @@ export default class extends AbstractView {
         `;
   }
 }
-

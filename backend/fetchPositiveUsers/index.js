@@ -17,8 +17,6 @@ module.exports = async function (context, req) {
 
     uniquePositiveUsers.set(json[i].User, json[i].UserName);
   }
-
-
   //Convert Map to JSON
   positiveUsers = [];
   for (let [key, value] of uniquePositiveUsers) {

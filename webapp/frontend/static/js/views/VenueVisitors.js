@@ -178,7 +178,7 @@ function fetchVenueVisitors() {
       endDate: endDate + "$" + endTime,
     });
 
-    fetch("http://localhost:7071/api/fetchVenueVisitors", {
+    fetch("https://comp3207functions.azurewebsites.net/api/fetchVenueVisitors", {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",

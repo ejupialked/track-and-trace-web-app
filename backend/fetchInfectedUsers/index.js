@@ -11,57 +11,33 @@ module.exports = async function (context, req) {
 
   console.log(reportsTable);
 
-
   var report = reportsTable[0];
-
-  
-
 
   if (reportsTable.length == 1) {
     var userId = reportsTable[0].User;
     var reportDate = reportsTable[0].Date; //e.g 2020-12-10
     var splitDate = reportDate.split("-"); //Splitting string to get yyyy, mm and dd separately
-    var dateObj = new Date(
-      splitDate[0],
-      parseInt(splitDate[1]) - 1,
-      splitDate[2]
-    ); //create a Date object
+    var dateObj = new Date(splitDate[0], parseInt(splitDate[1]) - 1, splitDate[2]); //create a Date object
     var newDate = new Date(dateObj - 14 * 24 * 60 * 60 * 1000); //Calculate date 7 days ago
 
-    console.log("obj: " + dateObj);
-
-    console.log("newDate: " + newDate);
-
-    console.log(reportDate);
 
     var sDate = formatDate(newDate) + "$00:00";
     var eDate = formatDate(dateObj) + "$23:59";
 
-
     ///INSERT THIS DATES in the report
-      report["report"] = "";
-      report["startDate"] = sDate;
-      report["endDate"] = eDate;
+    report["report"] = "";
+    report["startDate"] = sDate;
+    report["endDate"] = eDate;
 
-      infectedUsers.push(report);
-    let request =
-      "https://comp3207functions.azurewebsites.net/api/fetchRecentUserCheckins?startDate=" +
-      sDate +
-      "&endDate=" +
-      eDate +
-      "&userId=" +
-      userId;
+    infectedUsers.push(report);
+    let request = "https://comp3207functions.azurewebsites.net/api/fetchRecentUserCheckins?startDate=" + sDate + "&endDate=" + eDate + "&userId=" + userId;
 
-    console.log("Request: " + request);
 
     let userCheckins = await axios.get(request);
 
     userCheckins.data.forEach((c) => {
       infectedUsers.push(c);
-      console.log("------------------------------------------------------");
-      console.log(
-        "Venue: " + c.Venue + ", Name: " + c.VisitorName + ", Date: " + c.Date
-      );
+   
 
       // c.Date --> 2020-12-01$12:10
 
@@ -82,29 +58,14 @@ module.exports = async function (context, req) {
       date.setMonth(date.getMonth() - 1); //By default the month is ahead by 1.
       date.addHours(1);
 
-      console.log("+++++++++++++ " + date);
-
-      
 
       let positiveUser = c.PartitionKey;
       let venuedId = c.VenueId;
       let startDate = c.Date;
-      let endDate =
-        getDateWithZeros(date) +
-        "$" +
-        hoursWithZeros(date) +
-        ":" +
-        minutesWithZeros(date);
-
-      console.log(
-        "PositiveUser: " + c.VisitorName + ", [" + c.PartitionKey + "]"
-      );
-      console.log("VenueId: " + c.Venue + ", [" + c.VenueId + "]");
-      console.log("startDate: " + startDate);
-      console.log("??????????????????????????????? endDate: " + endDate);
+      let endDate = getDateWithZeros(date) + "$" + hoursWithZeros(date) + ":" +  minutesWithZeros(date);
 
       let request2 =
-        "https://comp3207functions.azurewebsites.net/api/searchInfectedUsers?startDate=" +
+      "https://comp3207functions.azurewebsites.net/api/searchInfectedUsers?startDate=" +
         startDate +
         "&endDate=" +
         endDate +
@@ -130,14 +91,12 @@ module.exports = async function (context, req) {
         uJson["time"] = u.Date.split("$")[1];
         uJson["venue"] = u.Venue;
         infectedUsers.push(uJson);
-        console.log("INFETTO: " + JSON.stringify(uJson));
       });
     });
 
     context.res = {
       body: infectedUsers,
     };
-    
   } else if (reportsTable.length == 0) {
     console.log("This user is not positive.");
     context.res = {
@@ -170,9 +129,14 @@ Date.prototype.addHours = function (h) {
   return this;
 };
 
-
-function getDateWithZeros(date){
-  return date.getFullYear() + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
+function getDateWithZeros(date) {
+  return (
+    date.getFullYear() +
+    "-" +
+    ("0" + (date.getMonth() + 1)).slice(-2) +
+    "-" +
+    ("0" + date.getDate()).slice(-2)
+  );
 }
 
 function minutesWithZeros(dt) {

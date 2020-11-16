@@ -5,7 +5,15 @@ module.exports = async function (context, req) {
 
   let infectedUsers = [];
 
-  let positiveUsersRequest = await axios.get( "https://comp3207functions.azurewebsites.net/api/fetchPositiveUsers");
+  const date = req.query.date || req.body.date;
+
+  if (isValidDate(date)){
+       context.res = {
+         body: "Insert a valid date: yyyy-mm-dd",
+       };
+  }
+
+  let positiveUsersRequest = await axios.get("https://comp3207functions.azurewebsites.net/api/fetchPositiveUsers");
 
   var promises = [];
 
@@ -30,10 +38,11 @@ module.exports = async function (context, req) {
   let uniquePositiveUsers = new Map(); //Map used to find unique users
 
   for (let i = 0; i < infectedUsers.length; i++) {
-    console.log("user: " + infectedUsers[i].infectedUser);
-    console.log("name: " + infectedUsers[i].time);
 
-    uniquePositiveUsers.set(infectedUsers[i].infectedUser, infectedUsers[i].time);
+    if (infectedUsers[i].date == date){
+        var us = infectedUsers[i];
+        uniquePositiveUsers.set(us.infectedUser, us.date + "$" + us.time + "$" + us.venue);
+    }
   }
 
   //Convert Map to JSON
@@ -44,10 +53,20 @@ module.exports = async function (context, req) {
     u["time"] = value;
     positiveUsers.push(u);
   }
-
   console.log(JSON.stringify(positiveUsers));
 
   context.res = {
-    body: positiveUsers,
+    body: positiveUsers.length,
   };
 };
+
+
+
+function isValidDate(date) {
+  var regEx = /^\d{4}-\d{2}-\d{2}$/;
+  if (!date.match(regEx)) return false;
+  var d = new Date(date);
+  var n = d.getTime();
+  if (!n && n !== 0) return false;
+  return d.toISOString().slice(0, 10) === date;
+}

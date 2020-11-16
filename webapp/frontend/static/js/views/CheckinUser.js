@@ -69,7 +69,7 @@ export default class extends AbstractView {
   async getHtml() {
     return `
       <h1>Check-in User</h1>
-      <p>Complete all the required to check-in a user</p>
+      <p>Complete all the required to check-in a user. <br> Every check-in has the duration of one hour.</p>
       <div id="output"></div>
       <div class="container">
         <form id="checkInForm">
@@ -146,7 +146,7 @@ function checkinUser() {
          userId: user,
        });
 
-       fetch("http://localhost:7071/api/checkinUser", {
+       fetch("https://comp3207functions.azurewebsites.net/api/checkinUser", {
          method: "POST",
          headers: {
            Accept: "application/json, text/plain, */*",

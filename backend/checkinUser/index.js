@@ -12,9 +12,6 @@ module.exports = async function (context, req) {
 
   const user = context.bindings.userEntity;
 
-
-
-
   if (user.length == 0) {
     console.log("USER NOT FOUND!");
     context.res = {
@@ -24,35 +21,40 @@ module.exports = async function (context, req) {
   } else {
     console.log("USER FOUND!");
 
-      var userJSON = JSON.stringify(user);
+    var userJSON = JSON.stringify(user);
 
-      console.log("date: " + date);
-      console.log("venue: " + JSON.stringify(venueEntity));
+    console.log("date: " + date);
+    console.log("venue: " + JSON.stringify(venueEntity));
 
+    var jsonString = JSON.stringify(venueEntity);
+    var jsonValue = JSON.parse(jsonString.substring(1, jsonString.length - 1));
 
-      var jsonString = JSON.stringify(venueEntity);
-      var jsonValue = JSON.parse(jsonString.substring(1, jsonString.length - 1));
+    //parse this
+    var json = JSON.parse(userJSON.substring(1, userJSON.length - 1));
 
-
-
-      //parse this
-      var json = JSON.parse(userJSON.substring(1, userJSON.length - 1));
-
-      console.log(jsonValue.RowKey);
-      console.log(jsonValue.PartitionKey);
+    console.log(jsonValue.RowKey);
+    console.log(jsonValue.PartitionKey);
 
     checkinsTable.push({
       PartitionKey: json.PartitionKey, //UserID
       RowKey: uuidv4(), //Checkin ID
-      Date: date+"$"+time, //Date of checkin
+      Date: date + "$" + time, //Date of checkin
       VenueId: jsonValue.PartitionKey, //VenueID
       Venue: jsonValue.RowKey, //VenueName
-      VisitorName: json.Name // Name of the visitors
+      VisitorName: json.Name, // Name of the visitors
     });
 
-      context.res = {
-        body: "Done! <b>" + json.Name + "</b> has checked-in at <b>" + jsonValue.RowKey + "</b>, " + date + " " + time,
-      };
+    context.res = {
+      body:
+        "Done! <b>" +
+        json.Name +
+        "</b> has checked-in at <b>" +
+        jsonValue.RowKey +
+        "</b>, " +
+        date +
+        " " +
+        time,
+    };
   }
 
   context.done();

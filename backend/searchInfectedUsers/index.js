@@ -10,7 +10,7 @@ module.exports = async function (context, req) {
   console.log("start date: " + startDate);
   console.log("end date: " + endDate);
   console.log("positiveUser: " + positiveUser);
-  console.log("venueId: " + endDate);
+  console.log("venueId: " + venueId);
 
   const checkinsTable = context.bindings.checkinsTable;
 

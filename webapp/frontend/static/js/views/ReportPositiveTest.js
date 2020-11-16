@@ -68,7 +68,7 @@ export default class extends AbstractView {
            <label for="Date">Date results: </label>
           <input type="date" id="date" name="date" placeholder="yyyy-mm-dd" required><br><br>
                <div id="submit">
-            <input type="submit" value="Send" />
+            <input type="submit" value="Report" />
           </div>
         </form>
       </div>
@@ -95,7 +95,7 @@ function sendReport() {
     userId: user,
   });
 
-  fetch("http://localhost:7071/api/reportPositiveTest", {
+  fetch("https://comp3207functions.azurewebsites.net/api/reportPositiveTest", {
     method: "POST",
     headers: {
       Accept: "application/json, text/plain, */*",
@@ -109,5 +109,5 @@ function sendReport() {
 
 function injectSubmit() {
   document.getElementById("submit").innerHTML =
-    '<input type="submit" value="Register" />';
+    '<input type="submit" value="Report" />';
 }

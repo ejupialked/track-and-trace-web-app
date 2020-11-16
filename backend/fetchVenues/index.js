@@ -1,5 +1,5 @@
 module.exports = async function (context, req) {
-      const inputTable = context.bindings.inputTable;
+  const inputTable = context.bindings.inputTable;
 
   var venues = [];
 
