@@ -50,8 +50,7 @@ module.exports = async function (context, req) {
 
 }
 
-
-
+//Taken from stackoverflow
 function isValidDate(date) {
   var regEx = /^\d{4}-\d{2}-\d{2}$/;
   if (!date.match(regEx)) return false;

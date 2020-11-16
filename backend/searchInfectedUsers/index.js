@@ -1,7 +1,6 @@
 module.exports = async function (context, req) {
-  //   "filter": "Date gt '{startDate}' and Date lt {endDate} and PartitionKey ne '{positiveUser}' and VenueId eq '{venueId}'",
 
-  context.log("Calling searchRecentUserCheckins..");
+  context.log("Calling searchInfectedUsers..");
   const startDate = req.query.startDate || req.body.startDate;
   const endDate = req.query.endDate || req.body.endDate;
   const positiveUser = req.query.positiveUser || req.body.positiveUser;

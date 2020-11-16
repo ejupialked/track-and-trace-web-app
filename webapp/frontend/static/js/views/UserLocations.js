@@ -151,11 +151,13 @@ function processResponse(response, details) {
         htmlTable += "</table>";
 
         document.getElementById("locationsTable").innerHTML = htmlTable;
-        injectSubmit();
 
 
         AbstractView.showInfo("Found " + json.length + " locations.");
       }
+
+        injectSubmit();
+
     });
   }
 }

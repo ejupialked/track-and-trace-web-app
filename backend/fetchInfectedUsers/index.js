@@ -129,6 +129,7 @@ Date.prototype.addHours = function (h) {
   return this;
 };
 
+//Taken from stackoverflow
 function getDateWithZeros(date) {
   return (
     date.getFullYear() +
@@ -138,11 +139,11 @@ function getDateWithZeros(date) {
     ("0" + date.getDate()).slice(-2)
   );
 }
-
+//Taken from stackoverflow
 function minutesWithZeros(dt) {
   return (dt.getMinutes() < 10 ? "0" : "") + dt.getMinutes();
 }
-
+//Taken from stackoverflow
 function hoursWithZeros(dt) {
   return (dt.getHours() < 10 ? "0" : "") + dt.getHours();
 }
