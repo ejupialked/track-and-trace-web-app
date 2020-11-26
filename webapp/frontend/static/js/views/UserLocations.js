@@ -43,7 +43,6 @@ export default class extends AbstractView {
       removeOutput();
       e.preventDefault();
       fetchUserLocations();
-      userLocationsForm.reset();
     });
   }
 

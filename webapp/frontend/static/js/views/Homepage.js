@@ -10,8 +10,8 @@ export default class extends AbstractView {
 
   async getHtml() {
     console.log("Returning html...");
-    return `   <h1>Welcome to the COVID-19 Track and Trace app</h1>
-      <p>Created by Alked Ejupi</p>
+    return `   <h1>Welcome to the Track and Trace app</h1>
+      <p>Please use the side bar to navigate all features of the application. </p>
       
 
         `;

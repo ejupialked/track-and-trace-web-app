@@ -10,7 +10,6 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "@azure/functions": "^1.0.2-beta2",
     "express": "^4.17.1"
   }
 }

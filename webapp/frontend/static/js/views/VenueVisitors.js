@@ -41,7 +41,6 @@ export default class extends AbstractView {
       removeOutput();
       e.preventDefault();
       fetchVenueVisitors();
-      venueVisitorsForm.reset();
     });
   }
 

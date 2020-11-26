@@ -21,8 +21,7 @@
       "connection": "covidtrackandtrace_STORAGE",
       "direction": "in",
       "type": "table",
-      "filter": "User eq '{userId}'",
-      "take": "1"
+      "filter": "User eq '{userId}'"
     }
   ]
 }

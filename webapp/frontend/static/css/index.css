@@ -1,42 +1,42 @@
-
 body {
   margin: 0;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 17px;
+  font-family: "Quicksand", sans-serif;
+  font-size: 17px;
 }
 
-select{
+select {
   margin-bottom: 20px;
 }
 
 #app {
   line-height: 1.5;
-    padding: 20px;
-    padding-left: 40px;
+  padding: 20px;
+  padding-left: 40px;
 }
-
 
 label {
   font-size: 80%;
   padding-right: 10px;
 }
 
-input[type=text], input[type=number], input[type=email] {
-  width: 100%; 
-  padding: 12px; 
-  border: 1px solid #ccc; 
-  border-radius: 4px; 
-  box-sizing: border-box; 
-  margin-top: 6px; 
-  margin-bottom: 16px; 
-  resize: vertical 
+input[type="text"],
+input[type="number"],
+input[type="email"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
 }
 
-input[type=radio]{
+input[type="radio"] {
   font-size: 12px;
 }
 
-input[type=submit] {
+input[type="submit"] {
   background-color: #373837;
   color: white;
   padding: 12px 20px;
@@ -45,7 +45,7 @@ input[type=submit] {
   cursor: pointer;
 }
 
-input[type=date] {
+input[type="date"] {
   background-color: #72787e;
   color: white;
   padding: 12px 20px;
@@ -55,13 +55,11 @@ input[type=date] {
   margin: 10px;
 }
 
-
-/* When moving the mouse over the submit button, add a darker green color */
-input[type=submit]:hover {
+input[type="submit"]:hover {
   background-color: #636863;
 }
 
-.radioGroup{
+.radioGroup {
   padding-bottom: 10px;
 }
 
@@ -72,38 +70,42 @@ input[type=submit]:hover {
   width: 400px;
 }
 
-.info, .success, .warning, .error, .validation {
+.info,
+.success,
+.warning,
+.error,
+.validation {
   font-size: small;
   width: 400px;
   border-radius: 5px;
   margin: 10px 0px;
-	padding: 15px 10px 15px 10px;
-	background-repeat: no-repeat;
-	background-position: 2px center;
+  padding: 15px 10px 15px 10px;
+  background-repeat: no-repeat;
+  background-position: 2px center;
 }
 
 .info {
-  color: #00529B;
-  background-color: #BDE5F8;
+  color: #00529b;
+  background-color: #bde5f8;
 }
 .success {
-  color: #4F8A10;
-  background-color: #DFF2BF;
+  color: #4f8a10;
+  background-color: #dff2bf;
 }
 
 .warning {
-  color: #9F6000;
-  background-color: #FEEFB3;
+  color: #9f6000;
+  background-color: #feefb3;
 }
 
-.error{
-  color: #D8000C;
-  background-color: #FFBABA;
+.error {
+  color: #d8000c;
+  background-color: #ffbaba;
 }
 
-.validation{
-  color: #D63301;
-  background-color: #FFCCBA;
+.validation {
+  color: #d63301;
+  background-color: #ffccba;
 }
 
 table {
@@ -113,7 +115,8 @@ table {
   margin-top: 20px;
 }
 
-td, th {
+td,
+th {
   font-size: 16px;
   border: 1px solid #dddddd;
   text-align: left;
@@ -124,7 +127,7 @@ tr:nth-child(even) {
   background-color: #d7e3eb;
 }
 
-
+/* Taken from https://www.w3schools.com/html/ */
 .loader {
   border: 2px solid #f3f3f3;
   border-radius: 50%;
@@ -136,16 +139,24 @@ tr:nth-child(even) {
   animation: spin 1s linear infinite;
 }
 
+/* Taken from https://www.w3schools.com/html/ */
 @-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
-
+/* Taken from https://www.w3schools.com/html/ */
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-
 
 .sidebar {
   margin: 0;
@@ -164,13 +175,11 @@ tr:nth-child(even) {
   text-decoration: none;
 }
 
-/* Active/current link */
 .sidebar a.active {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
 }
 
-/* Links on mouse-over */
 .sidebar a:hover:not(.active) {
   background-color: rgb(87, 129, 153);
   color: white;
@@ -180,6 +189,7 @@ div.content {
   margin-left: 200px;
   padding: 1px 16px;
 }
+/* Taken from https://www.w3schools.com/html/ */
 
 @media screen and (max-width: 700px) {
   .sidebar {
@@ -187,26 +197,32 @@ div.content {
     height: auto;
     position: relative;
   }
-  .sidebar a {float: left;}
-  div.content {margin-left: 0;}
+  .sidebar a {
+    float: left;
+  }
+  div.content {
+    margin-left: 0;
+  }
 }
+/* Taken from https://www.w3schools.com/html/ */
 
 @media screen and (max-width: 400px) {
   .sidebar a {
     text-align: center;
     float: none;
   }
-} 
+}
 
+/* Taken from https://www.w3schools.com/html/ */
 .footer {
-      font-size: 11px;
-  font-family: Arial,"Helvetica Neue",Helvetica,sans-serif;
+  font-size: 11px;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   position: absolute;
   margin-left: 50px;
-   bottom: 0;
-   width: 100%;
-   color: rgb(87, 86, 86);
-   text-align: center;
+  bottom: 0;
+  width: 100%;
+  color: rgb(87, 86, 86);
+  text-align: center;
 }
 
 .multiselect {

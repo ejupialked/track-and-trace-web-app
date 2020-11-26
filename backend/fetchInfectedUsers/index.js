@@ -11,11 +11,11 @@ module.exports = async function (context, req) {
 
   console.log(reportsTable);
 
-  var report = reportsTable[0];
+  var report = reportsTable[reportsTable.length-1];
 
-  if (reportsTable.length == 1) {
-    var userId = reportsTable[0].User;
-    var reportDate = reportsTable[0].Date; //e.g 2020-12-10
+  if (reportsTable.length > 0) {
+    var userId = report.User;
+    var reportDate = report.Date; //e.g 2020-12-10
     var splitDate = reportDate.split("-"); //Splitting string to get yyyy, mm and dd separately
     var dateObj = new Date(splitDate[0], parseInt(splitDate[1]) - 1, splitDate[2]); //create a Date object
     var newDate = new Date(dateObj - 14 * 24 * 60 * 60 * 1000); //Calculate date 7 days ago
