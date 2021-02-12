@@ -9,7 +9,8 @@ app.get("/*", (req, res) => {
     res.sendFile(path.resolve(__dirname,'frontend', "index.html"));
 });
 
-/**
- * Start Express server.
- */
-app.listen(process.env.PORT || 5061, () => console.log("Server running..."));
+const port = 3000;
+
+app.listen(port, () => {
+    console.log(`App listening at http://localhost:${port}`)
+})
